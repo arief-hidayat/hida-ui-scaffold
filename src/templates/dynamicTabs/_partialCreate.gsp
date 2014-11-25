@@ -2,9 +2,9 @@
     <g:render template="message"/>
 </div>
 <div class="row" style="margin-left: 0px">
-    <g:form url="[resource:${propertyName}, action:'save']" <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
+    <g:form id="${className}-create-form" url="[resource:${propertyName}, action:'save']" <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
     <fieldset class="form">
-        <g:render template="form"  model="\${[prefix : prefix, create : true]}"/>
+        <g:render template="form" model="['create' : true]"/>
     </fieldset>
     <fieldset class="buttons">
         <g:submitButton data-action="save" name="create" class="btn btn-success" value="\${message(code: 'default.button.create.label', default: 'Create')}" />

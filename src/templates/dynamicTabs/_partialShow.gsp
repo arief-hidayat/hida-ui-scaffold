@@ -8,7 +8,7 @@
         <g:hiddenField name="version" value="\${${propertyName}?.version}"/>
         <g:hiddenField name="id" value="\${${propertyName}?.id}"/>
         <fieldset class="form">
-            <g:render template="form" model="\${[prefix : prefix, 'show' : true]}"/>
+            <g:render template="form"  model="['show' : true]"/>
         </fieldset>
         <fieldset class="buttons">
             <fieldset class="buttons">

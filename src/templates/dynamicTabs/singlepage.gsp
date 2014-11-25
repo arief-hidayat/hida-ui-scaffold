@@ -18,7 +18,7 @@
 
 <!-- Main content -->
 <section class="content">
-<g:render template="partialSinglePage"  model="\${[prefix : prefix]}"/><!-- /.row (main row) -->
+<g:render template="partialSinglePage"/><!-- /.row (main row) -->
 </section><!-- /.content -->
 <asset:javascript src="app/page01.js"/>
 <script type="text/javascript" charset="utf-8">
