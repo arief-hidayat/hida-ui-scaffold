@@ -18,13 +18,21 @@
 
 <!-- Main content -->
 <section class="content">
-<g:render template="partialSinglePage"/><!-- /.row (main row) -->
 </section><!-- /.content -->
 <asset:javascript src="app/page01.js"/>
 <script type="text/javascript" charset="utf-8">
     App.url = "${request.contextPath}";
     jQuery(document).ready(function() {
-        new App.view.TableFormSinglePage({ key : "EmployeeType"});
+        new App.view.DynamicTabs({ key : "EmployeeType", tabs : [
+		{ 
+			tabId : "act-et", tabNameCd : "employeeType.current.label", tabNameDefault : "Current Employee Type", 
+			dataTable : { url : "/dataTable/EmployeeType" , data : { 'f_status' : 'ACTIVE' } }
+		},
+		{ 
+			tabId : "arc-et", tabNameCd : "employeeType.archived.label", tabNameDefault : "Archived Employee Type", 
+			dataTable : { url : "/dataTable/EmployeeType" , data : { 'f_status' : 'INACTIVE' } }
+		},
+		], allTabsAreRelated : true});
     } );
 </script>
 </body>

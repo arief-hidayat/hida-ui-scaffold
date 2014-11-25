@@ -1,7 +1,7 @@
 <%@ page import="test.EmployeeType" %>
 <% int tableWidth = grails.util.Holders.config.imms?.datatable?.singlepage?.width?.EmployeeType ?: 6 %>
-<div class="row" id="content-section">
-    <div id="list-section" class="col-md-${tableWidth}">%{--App.view.TableRegion--}%
+<div class="row" id="${prefix?:''}content-section">
+    <div id="${prefix?:''}list-section" class="col-md-${tableWidth}">%{--App.view.TableRegion--}%
         <div class="row buttons" style="margin-top: 10px">
             <div class="col-md-8 col-xs-8 col-centered">
                 <bt:create>&nbsp;</bt:create>
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div id="detail-section" class="col-md-${12 - tableWidth}">
+    <div id="${prefix?:''}detail-section" class="col-md-${12 - tableWidth}">
 
         <g:render template="partialCreate"/>
     </div>

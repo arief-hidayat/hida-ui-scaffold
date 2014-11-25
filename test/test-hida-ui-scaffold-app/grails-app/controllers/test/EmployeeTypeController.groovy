@@ -23,12 +23,12 @@ class EmployeeTypeController {
     def showForm(EmployeeType employeeTypeInstance) {
         render(model: [employeeTypeInstance: employeeTypeInstance], view: "_partialShow") //
     }
-
+	
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         if(EmployeeType.class.simpleName in Holders.config.imms?.singlePage ?:[]) {
-            render view: "singlepage", model: [employeeTypeInstance: new EmployeeType()]
+            render view: (params._partial ? "_partialSinglePage" : "singlepage"), model: [employeeTypeInstance: new EmployeeType(), prefix : params._prefix]
         } else {
             respond new EmployeeType()
         }
