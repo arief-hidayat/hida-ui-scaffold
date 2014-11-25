@@ -10,7 +10,7 @@ ${"<% int tableWidth = grails.util.Holders.config.imms?.datatable?.singlepage?.w
             </div>
         </div>
         <div class="row">
-            <dt:table key='\${prefix?:""}${className}'/>%{-- App.view.Table--}%
+            <dt:table key="\${tableColumnKey?:'${className}'}"/>%{-- App.view.Table--}%
         </div>
     </div>
 

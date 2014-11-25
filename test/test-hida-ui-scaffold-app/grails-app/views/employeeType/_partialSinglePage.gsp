@@ -10,14 +10,11 @@
             </div>
         </div>
         <div class="row">
-            <dt:table key='EmployeeType'/>%{-- App.view.Table--}%
+            <dt:table key="${tableColumnKey?:'EmployeeType'}"/>%{-- App.view.Table--}%
         </div>
     </div>
 
     <div id="${prefix?:''}detail-section" class="col-md-${12 - tableWidth}">
-
-        <g:render template="partialCreate"/>
+        <g:render template="partialCreate" model="${[prefix : prefix, create : true]}"/>
     </div>
 </div>
-</body>
-</html>

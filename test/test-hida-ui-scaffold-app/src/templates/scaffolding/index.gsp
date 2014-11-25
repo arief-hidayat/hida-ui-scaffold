@@ -26,7 +26,7 @@
             </div>
         </div>
         <div id="detail-section" class="tab-pane col-md-12">
-            <g:render template="partialCreate"/>
+            <g:render template="partialCreate"  model="\${[prefix : prefix, create : true]}"/>
         </div>
     </div>
 </div>

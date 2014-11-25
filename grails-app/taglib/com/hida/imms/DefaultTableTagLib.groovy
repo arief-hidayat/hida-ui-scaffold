@@ -58,7 +58,5 @@ class DefaultTableTagLib {
 //        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 //        <span class="glyphicon glyphicon-star"></span> Action <span class="caret"></span>
 //        </button>
-
-
     }
 }
