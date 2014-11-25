@@ -165,10 +165,11 @@
         delete : function(selectedRow) {
             App.logDebug("delete... selectedRow:" + selectedRow);
         },
-        deleteRowById : function(id) {
-            this.tableView.deleteRowById(id);
-            this.reloadTable();
-        },
+        // seems not used.
+//        deleteRowById : function(id) {
+//            this.tableView.deleteRowById(id);
+//            this.reloadTable(true); // on delete event, we publish table:reloaded evt later on.
+//        },
         reloadTable: function() {
             this.initTable(this.tableView.getSelectedRows());
         },

@@ -1,7 +1,3 @@
-// bootstrap 3.1.1
-// + datetimepicker 3.0.0 https://github.com/Eonasdan/bootstrap-datetimepicker http://eonasdan.github.io/bootstrap-datetimepicker
-// + typeahead https://github.com/bassjobsen/Bootstrap-3-Typeahead
-//
 //= require /app/ui-components/app-hida-datatables
 //= require /app/ui-components/app-hida-typeahead
 //= require /app/ui-components/app-hida-datepicker
@@ -80,11 +76,12 @@
             return formData;
         },
         initialize: function(opt) {
-            this.formId = opt.formId;
+            this.formId = opt.formId; // seems like not used
             this.readOnly = opt.readOnly || this.readOnly;
             this.setupDatePickerFields();
             this.setupTypeAheadFields();
             this.setupSelect2(this.readOnly);
+
 //            this.setupManyToManyFields(this.readOnly);
         },
         setupDatePickerFields : function(parentEl) {

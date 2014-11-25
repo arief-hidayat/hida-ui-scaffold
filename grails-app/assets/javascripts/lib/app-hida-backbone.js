@@ -16,10 +16,11 @@ var pubSub = _.extend({},Backbone.Events); //http://blog.safaribooksonline.com/2
             Backbone.View.apply(this,arguments);
         },
         publishEvt : function(code, data) {
-            App.logDebug(">>> published event = "+ code);
+            window.console&&console.log(">>> published event [_listenId= "+ this.pubSub._listenId + ", code=" + code + "]");
             this.pubSub.trigger(code, _.extend({key : this.key}, data));
         },
         subscribeEvt : function(code, callback) {
+            window.console&&console.log(">>> subscribe event [_listenId= "+ this.pubSub._listenId + ", code=" + code + "]");
             this.listenTo(this.pubSub, code, callback ,this);
         },
         remove: function() {

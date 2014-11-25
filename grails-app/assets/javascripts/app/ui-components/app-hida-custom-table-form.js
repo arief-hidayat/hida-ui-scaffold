@@ -1,7 +1,3 @@
-// bootstrap 3.1.1
-// + datetimepicker 3.0.0 https://github.com/Eonasdan/bootstrap-datetimepicker http://eonasdan.github.io/bootstrap-datetimepicker
-// + typeahead https://github.com/bassjobsen/Bootstrap-3-Typeahead
-//
 //= require /app/ui-components/app-hida-datatables
 //= require_self
 
@@ -59,6 +55,8 @@
             }
         },
         initialize: function(opt) {
+            this.tableEl = opt.tableEl || this.tableEl;
+            this.formEl = opt.formEl || this.formEl;
 //            this.setEditableForm = opt.setEditableForm || opt.setForm || this.setEditableForm;
 //            this.setReadOnlyForm = opt.setReadOnlyForm || opt.setForm || this.setReadOnlyForm;
             this.otherInitialization(opt);
@@ -88,7 +86,7 @@
                     function(buildFormParam) {
                         return function( data ) {
                             this.removeForm();
-                            $(this.formEl).html(data); // note that 'append' only work for two tabs.
+                            this.$(this.formEl).html(data); // note that 'append' only work for two tabs.
                             this.buildForm(buildFormParam);
                             this.showForm();
                         }
@@ -130,16 +128,19 @@
                 $.when.apply(this, ajaxArray).done(function(){
                     App.logDebug("rebuild table ");
                     this.publishEvt("table:item:deleted", data.selectedRows);//TODO: onCreate... publish item:created
-                    this.buildTable();
+                    this.buildTable(true);
                 });
             }
             if(resetForm) this.resetForm();
         },
-        buildTable : function() {
+        buildTable : function(publishReload) {
             if(this.table == undefined) {
                 this.table = new App.view.TableRegion( {el: this.tableEl, key: this.key, pubSub: this.pubSub, customUrl : this.tableCustomUrl} );
             }
             else this.table.reloadTable();
+            if(publishReload) {
+                this.publishEvt("table:reloaded", {});
+            }
         },
         buildForm : function(initialForm) {
             if(this.form == undefined) {
@@ -196,7 +197,7 @@
         onDeleteForm : function(dt){
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
-                { action : "create"},{ id : form.id, action : "show"});
+                { action : "create"},{ id : form.id, action : "show"}, true);
             // backend is expected to delete item and return _partialCreate
         },
         onEditForm : function(dt){
@@ -207,13 +208,13 @@
         onSaveForm : function(dt) {
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
-                { action : "show"}, {  action : "create"});
+                { action : "show"}, {  action : "create"}, true);
         },
         onUpdateForm : function(dt) {
             App.logDebug("onUpdateForm ..." );
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
-                { id : form.id, action : "show"}, { id : form.id, action : "update"});
+                { id : form.id, action : "show"}, { id : form.id, action : "update"}, true);
         },
         getHtml : function(url, option, callback) {
             return $.ajax({
@@ -242,8 +243,8 @@
                 context : this // make sure this BB view is the context
             }).done(successCallBack || function(){}).fail(failCallback || function(){});
         },
-        ajaxRequestForPartialView : function(action, url, form, expectedForm, initialForm) {
-            var successCallback = (function(expectedForm) {
+        ajaxRequestForPartialView : function(action, url, form, expectedForm, initialForm, publishReloadEvt) {
+            var successCallback = (function(expectedForm, publishReloadEvt) {
                 return function( data ) {
                     if(this.form != null) { this.form.remove(); this.form = undefined; }
                     $(this.formEl).html(data); // note that 'append' only work for two tabs.
@@ -251,9 +252,9 @@
                         expectedForm.id = $(this.formEl).find("[name='id']").val();
                     }
                     this.buildForm(expectedForm); // pass id, action
-                    this.buildTable();
+                    this.buildTable(publishReloadEvt);
                 }
-            })(expectedForm);
+            })(expectedForm, publishReloadEvt);
             var failCallback = (function(initialForm){
                 return function(jqXHR) {
                     switch (jqXHR.status) {
