@@ -28,7 +28,7 @@ class DataTableService {
         def searchOptions = [offset: req.start, max: req.length]
         Class domainClz = immsUiUtilService.getClassFromKey(key)?.clazz
         def searchResults = domainClz.search({
-            if(req.search.value) must(queryString(req.search.value))
+            if(req.search.value) must(c(req.search.value))
             for(DtReqColumn col : req.columns) {
                 if(col.search.value) {
                     if(!col.search.regex) term(col.data, col.search.value) //TODO: this works only for String value.
@@ -50,6 +50,23 @@ class DataTableService {
         def domainClz = immsUiUtilService.getClassFromKey(key)?.clazz
         Criteria criteria = domainClz.createCriteria()
         def results = criteria.list(max : req.length, offset: req.start) { //PagedResultList
+            if(req.search.value) {
+                if(req.columns.size() > 0) {
+                    String field= req.columns[0].data
+                    if(!req.search.regex) {
+                        eq(field, getValue(req.search.value), [ignoreCase: ignoreCase])
+                    }
+                    else {
+                        def searchTerm = getValue(req.search.value)
+                        if(searchTerm instanceof String)  searchTerm = searchTerm.replaceAll("[*]", "%")
+                        if(ignoreCase) {
+                            ilike(field, searchTerm)
+                        } else {
+                            like(field, searchTerm)
+                        }
+                    }
+                }
+            }
             additionalFilter.each {
                 String fieldFilter, String fieldValue ->
                     eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
@@ -58,8 +75,18 @@ class DataTableService {
                 order(req.columns.get(ord.column).data, ord.dir)
             for(DtReqColumn col : req.columns) {
                 if(col.search.value) {
-                    if(!col.search.regex) eq(col.data, getValue(col.search.value), [ignoreCase: ignoreCase])
-                    // no support for regex
+                    if(!col.search.regex) {
+                        eq(col.data, getValue(col.search.value), [ignoreCase: ignoreCase])
+                    }
+                    else {
+                        def searchTerm = getValue(col.search.value)
+                        if(searchTerm instanceof String)  searchTerm = searchTerm.replaceAll("[*]", "%")
+                        if(ignoreCase) {
+                            ilike(col.data, searchTerm)
+                        } else {
+                            like(col.data, searchTerm)
+                        }
+                    }
                 }
             }
         }
