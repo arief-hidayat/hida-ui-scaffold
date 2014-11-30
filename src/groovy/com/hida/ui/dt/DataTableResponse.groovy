@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui.dt
 
 import grails.util.Holders
 
@@ -11,14 +11,14 @@ class DataTableResponse {
     int draw, recordsTotal, recordsFiltered
     def data = []
 
-    static def rowClassConf = Holders.config.imms?.datatable?.rowclass ?: [:]
-    static def domainKeyConf = Holders.config.imms?.datatable?.domainkey ?: [:]
-    static def domainFieldsConf = Holders.config.imms?.datatable?.domainfields ?: [:]
+    static def rowClassConf = Holders.config.hida?.datatable?.rowclass ?: [:]
+    static def domainKeyConf = Holders.config.hida?.datatable?.domainkey ?: [:]
+    static def domainFieldsConf = Holders.config.hida?.datatable?.domainfields ?: [:]
     // can be array of fieldName or callback function.
     static final String ROW_ID = "DT_RowId", ROW_CLASS = "DT_RowClass", ROW_DATA = "DT_RowData"
 
     static def compositeKeyMap = [:]
-    static String compositeKeyDelimiter = Holders.config.imms?.datatable?.compositekeydelimiter ?: "_"
+    static String compositeKeyDelimiter = Holders.config.hida?.datatable?.compositekeydelimiter ?: "_"
 
     DataTableResponse withData(def list) {
         list.each { data << DataTableResponse.Item.build(it) }
@@ -50,7 +50,7 @@ class DataTableResponse {
         }
 
         /**
-         * if not configured (e.g imms.datatable.domainkey.Asset). then it's a domain with id as single PK.
+         * if not configured (e.g hida.datatable.domainkey.Asset). then it's a domain with id as single PK.
          * @param map
          * @param it
          */

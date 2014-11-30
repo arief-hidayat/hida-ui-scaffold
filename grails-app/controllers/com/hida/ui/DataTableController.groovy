@@ -1,5 +1,6 @@
-package com.hida.imms
+package com.hida.ui
 
+import com.hida.ui.dt.DataTableRequest
 import grails.converters.JSON
 
 class DataTableController {

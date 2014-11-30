@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.converters.JSON
 

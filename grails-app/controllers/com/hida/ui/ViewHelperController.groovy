@@ -1,6 +1,6 @@
-package com.hida.imms
+package com.hida.ui
 
-import com.hida.imms.ui.DynamicTabItem
+import com.hida.ui.DynamicTabItem
 
 class ViewHelperController {
 

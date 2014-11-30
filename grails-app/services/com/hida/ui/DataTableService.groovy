@@ -1,5 +1,9 @@
-package com.hida.imms
+package com.hida.ui
 
+import com.hida.ui.dt.DataTableRequest
+import com.hida.ui.dt.DataTableResponse
+import com.hida.ui.dt.DtReqColumn
+import com.hida.ui.dt.DtReqOrder
 import grails.transaction.Transactional
 import grails.util.Holders
 import org.codehaus.groovy.grails.commons.GrailsClassUtils
@@ -7,13 +11,13 @@ import org.grails.datastore.mapping.query.api.Criteria
 
 @Transactional
 class DataTableService {
-    def immsUiUtilService
-    private static final boolean ignoreCase = Holders.config.imms?.typeahead?.ignoreCase ?: false
+    def hidaUiUtilService
+    private static final boolean ignoreCase = Holders.config.hida?.typeahead?.ignoreCase ?: false
 
     @Transactional(readOnly = true)
     DataTableResponse list(String key, DataTableRequest req, def additionalFilter= [:]) { // for simplicity, key is domainName
 //        println "list dataTable -> ${req.draw} ${req.start} ${req.length}. search : ${req.search}"
-        Class domainClz = immsUiUtilService.getClassFromKey(key)?.clazz
+        Class domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
         if(req.search.value && (Holders.pluginManager.hasGrailsPlugin("searchable") || Holders.pluginManager.hasGrailsPlugin("elasticsearch")) &&
                 GrailsClassUtils.getStaticPropertyValue(domainClz, "searchable")) {
             return listBySearchablePlugin(key, req)
@@ -26,7 +30,7 @@ class DataTableService {
     protected def listBySearchablePlugin(String key, DataTableRequest req) {
         DataTableResponse resp = new DataTableResponse(draw: req.draw)
         def searchOptions = [offset: req.start, max: req.length]
-        Class domainClz = immsUiUtilService.getClassFromKey(key)?.clazz
+        Class domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
         def searchResults = domainClz.search({
             if(req.search.value) must(c(req.search.value))
             for(DtReqColumn col : req.columns) {
@@ -47,7 +51,7 @@ class DataTableService {
 
     protected def listByDefaultHibernatePlugin(String key, DataTableRequest req, def additionalFilter= [:]) {
         DataTableResponse resp = new DataTableResponse(draw: req.draw)
-        def domainClz = immsUiUtilService.getClassFromKey(key)?.clazz
+        def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
         Criteria criteria = domainClz.createCriteria()
         def results = criteria.list(max : req.length, offset: req.start) { //PagedResultList
             if(req.search.value) {

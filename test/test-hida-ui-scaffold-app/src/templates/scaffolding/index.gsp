@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="imms"/>
+    <meta name="layout" content="hida01"/>
     <g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${className}')}" />
     <title><g:message code="default.list.label" args="[entityName]" /></title>
 </head>

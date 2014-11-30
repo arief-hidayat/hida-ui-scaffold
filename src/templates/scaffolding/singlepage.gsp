@@ -3,9 +3,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="layout" content="imms"/>
+    <meta name="layout" content="hida01"/>
     <g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${className}')}" />
-    <title>IMMS | <g:message code="default.list.label" args="[entityName]" /></title>
+    <title>HIDA | <g:message code="default.list.label" args="[entityName]" /></title>
     <asset:stylesheet src="app-hida-all.css"/>
 </head>
 <body>

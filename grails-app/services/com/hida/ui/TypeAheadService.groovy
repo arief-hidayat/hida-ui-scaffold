@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.transaction.Transactional
 import grails.util.Holders
@@ -8,19 +8,19 @@ import org.codehaus.groovy.grails.commons.GrailsDomainClass
 @Transactional
 class TypeAheadService {
 
-    private static final def typeAheadConf = Holders.config.imms?.typeahead?.displayKey ?: [:]
-    private static final boolean ignoreCase = Holders.config.imms?.typeahead?.ignoreCase ?: false
-    def immsUiUtilService
+    private static final def typeAheadConf = Holders.config.hida?.typeahead?.displayKey ?: [:]
+    private static final boolean ignoreCase = Holders.config.hida?.typeahead?.ignoreCase ?: false
+    def hidaUiUtilService
 
 
     @Transactional(readOnly = true)
     def list(String key, def params, String query) {
         def conf = typeAheadConf[key]
-        GrailsDomainClass grailsDomainClass = immsUiUtilService.getClassFromKey(key)
+        GrailsDomainClass grailsDomainClass = hidaUiUtilService.getClassFromKey(key)
         Class domainClz = grailsDomainClass.clazz
         if(conf) {
             if(conf instanceof String) {
-//                imms.typeahead.Asset = "code"
+//                hida.typeahead.Asset = "code"
                 if(query.endsWith("*")) query = query.substring(0, query.length() -1)
                 return domainClz.createCriteria().list {
                     params.each { String k, String v ->

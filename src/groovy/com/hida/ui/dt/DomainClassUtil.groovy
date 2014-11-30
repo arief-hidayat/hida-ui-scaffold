@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui.dt
 
 import org.codehaus.groovy.grails.orm.hibernate.cfg.CompositeIdentity
 import org.codehaus.groovy.grails.orm.hibernate.cfg.GrailsDomainBinder

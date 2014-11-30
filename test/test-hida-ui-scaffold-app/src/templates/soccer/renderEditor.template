@@ -51,7 +51,7 @@
 
 
     private boolean fieldHasBeenPopulatedFromTypeAhead(String field) {
-        def populatedFieldsConf = grails.util.Holders.config.imms?.typeahead?.populatedFields?."${domainInstance}" ?: [:]
+        def populatedFieldsConf = grails.util.Holders.config.hida?.typeahead?.populatedFields?."${domainInstance}" ?: [:]
         for(java.util.Map map : populatedFieldsConf.values()) {
             if(!map) continue
             for(String parentField : map.keySet()) {

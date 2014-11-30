@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 class DefaultMessageTagLib {
 

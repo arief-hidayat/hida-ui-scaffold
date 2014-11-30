@@ -125,7 +125,7 @@ jodatime.format.org.joda.time.LocalDate = "yyyy-MM-dd"
 jodatime.format.org.joda.time.LocalDateTime = "yyyy-MM-dd HH:mm"
 jodatime.format.org.joda.time.LocalTime = "HH:mm"
 grails.databinding.useSpringBinder = true
-imms {
+hida {
     datepicker {
         showValueOnEdit = true
     }

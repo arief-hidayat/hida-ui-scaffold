@@ -1,5 +1,5 @@
 <%=packageName%>
-${"<% int tableWidth = grails.util.Holders.config.imms?.datatable?.singlepage?.width?." + className + " ?: 6 %>"}
+${"<% int tableWidth = grails.util.Holders.config.hida?.datatable?.singlepage?.width?." + className + " ?: 6 %>"}
 <div class="row" id="content-section">
     <div id="list-section" class="col-md-\${tableWidth}">%{--App.view.TableRegion--}%
         <div class="row buttons" style="margin-top: 10px">

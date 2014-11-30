@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.util.GrailsNameUtils
 import grails.util.Holders
@@ -27,7 +27,7 @@ class DefaultTableTagLib {
     protected String buildHeaderColumns(String domainName) {
         StringBuilder sb = new StringBuilder()
         sb.append("<tr>")
-        def conf = Holders.config.imms?.datatable?.domainfields ?: [:]
+        def conf = Holders.config.hida?.datatable?.domainfields ?: [:]
         conf[domainName]?.each {
             sb.append("<td>").append(getMessage(domainName, it)).append("</td>")
         }

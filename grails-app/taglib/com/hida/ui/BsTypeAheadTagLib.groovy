@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.util.GrailsNameUtils
 import grails.util.Holders
@@ -28,7 +28,7 @@ class BsTypeAheadTagLib {
     }
 
 
-    def displayKeyConf = Holders.config.imms?.typeahead?.displayKey ?: [:]
+    def displayKeyConf = Holders.config.hida?.typeahead?.displayKey ?: [:]
 
 
     private StringBuilder buildTypeAheadDiv(def attrs) {
@@ -74,7 +74,7 @@ class BsTypeAheadTagLib {
 
             sb.append("<div id='").append(fieldPrefix).append(field).append("-values'>")
 
-            def populatedFieldsConf = Holders.config.imms?.typeahead?.populatedFields?."${parentInstance}"?."${field}" ?: ( attrs.populatedFieldsConf ?: [:])
+            def populatedFieldsConf = Holders.config.hida?.typeahead?.populatedFields?."${parentInstance}"?."${field}" ?: ( attrs.populatedFieldsConf ?: [:])
             if(!populatedFieldsConf.containsKey(field) && displayKey) {
                 populatedFieldsConf.put(field, displayKey)
             }

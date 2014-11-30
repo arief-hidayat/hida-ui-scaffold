@@ -1,4 +1,4 @@
-package com.hida.imms.ui
+package com.hida.ui
 
 /**
  * Created by arief.hidayat on 25/11/2014.

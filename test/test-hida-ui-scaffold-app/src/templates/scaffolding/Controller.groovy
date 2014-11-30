@@ -25,7 +25,7 @@ class ${className}Controller {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        if(${className}.class.simpleName in Holders.config.imms?.singlePage ?:[]) {
+        if(${className}.class.simpleName in Holders.config.hida?.singlePage ?:[]) {
             render view: (params._partial ? "_partialSinglePage" : "singlepage") , model: [${propertyName}: new ${className}(), prefix : params._prefix]
         } else {
             respond new ${className}()

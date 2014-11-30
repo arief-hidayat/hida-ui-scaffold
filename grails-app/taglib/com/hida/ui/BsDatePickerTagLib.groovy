@@ -1,4 +1,4 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.util.GrailsNameUtils
 import grails.util.Holders
@@ -45,7 +45,7 @@ class BsDatePickerTagLib {
         out << buildDatePicker(fields, attrs, "datePicker")
     }
 
-    private static final def SHOW_VALUE_ON_EDIT = Holders.config.imms?.datepicker?.showValueOnEdit ?: false
+    private static final def SHOW_VALUE_ON_EDIT = Holders.config.hida?.datepicker?.showValueOnEdit ?: false
     private void overrideDefaultAttrs(attrs) {
         //this is to display date value when it's not readonly.
         if(SHOW_VALUE_ON_EDIT && !attrs.nojs) {

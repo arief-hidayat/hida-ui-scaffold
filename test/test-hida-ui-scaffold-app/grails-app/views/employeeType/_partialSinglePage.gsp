@@ -1,5 +1,5 @@
 <%@ page import="test.EmployeeType" %>
-<% int tableWidth = grails.util.Holders.config.imms?.datatable?.singlepage?.width?.EmployeeType ?: 6 %>
+<% int tableWidth = grails.util.Holders.config.hida?.datatable?.singlepage?.width?.EmployeeType ?: 6 %>
 <div class="row" id="${prefix?:''}content-section">
     <div id="${prefix?:''}list-section" class="col-md-${tableWidth}">%{--App.view.TableRegion--}%
         <div class="row buttons" style="margin-top: 10px">

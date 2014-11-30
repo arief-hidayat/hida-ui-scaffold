@@ -1,10 +1,10 @@
-package com.hida.imms
+package com.hida.ui
 
 import grails.transaction.Transactional
 import org.codehaus.groovy.grails.commons.GrailsDomainClass
 
 @Transactional
-class ImmsUiUtilService {
+class HidaUiUtilService {
     def grailsApplication
 
     static final Map<String, GrailsDomainClass> keyClassMap = new LinkedHashMap<>()
