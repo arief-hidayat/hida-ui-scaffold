@@ -15,24 +15,24 @@ Check the generated views and controller. you might want to change some contents
 
 At the moment, you need to add new javascript assets: app/settings.js
 
-`
-// override whatever is required from core.settings.
-//= require core.settings
-//= require_self
 
-App.dt.config.table = {
-    // define dataTable columns
-    EmployeeType : { columns: [ { "data": "type" } ] }
-};
+    // override whatever is required from core.settings.
+    //= require core.settings
+    //= require_self
+    
+    App.dt.config.table = {
+        // define dataTable columns
+        EmployeeType : { columns: [ { "data": "type" } ] }
+    };
+    
+    App.dt.config.customUrl = { /// for dataTable query
+    //        Asset : {
+    //            url : "only for custom",
+    //            data : function(){},
+    //            extraParams : function(request) { }
+    //        }
+    };
 
-App.dt.config.customUrl = { /// for dataTable query
-//        Asset : {
-//            url : "only for custom",
-//            data : function(){},
-//            extraParams : function(request) { }
-//        }
-};
-`
 
 You also need to update Config.groovy
 
