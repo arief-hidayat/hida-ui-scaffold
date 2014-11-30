@@ -29,7 +29,7 @@
         new App.view.DynamicTabs({ key : "${className}", tabs : [
             {
                 tabId : "act-${domainClass.propertyName}", tabNameCd : "${domainClass.propertyName}.current.label", tabNameDefault : "-",
-                dataTable : { url : "/dataTable/EmployeeType" , data : { 'f_status' : 'ACTIVE' } }
+                dataTable : { url : "/dataTable/${className}" , data : { 'f_status' : 'ACTIVE' } }
             },
             {
                 tabId : "arc-${domainClass.propertyName}", tabNameCd : "${domainClass.propertyName}.archived.label", tabNameDefault : "-",
