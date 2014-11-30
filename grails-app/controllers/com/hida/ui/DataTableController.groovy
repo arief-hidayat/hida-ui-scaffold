@@ -11,7 +11,6 @@ class DataTableController {
     def list(String domainName) {
         DataTableRequest req = new DataTableRequest(params)
         Map filterData = getFilterData(params)
-        println "dataTable list $domainName filter data ${filterData}"
         render dataTableService.list(domainName, req, filterData) as JSON
     }
 
