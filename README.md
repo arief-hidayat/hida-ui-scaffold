@@ -6,8 +6,10 @@ Install templates:
 > grails install-hida-ui-templates
 
 Create domain with all fields then generate view & controller with:
-> grails generate-hida-ui test.Employee --> it will generate view and controller from src/templates/scaffolding
-> grails generate-hida-ui different-scaffold:test.Employee --> from src/templates/different-scaffold
+> grails generate-hida-ui test.Employee
+it will generate view and controller from src/templates/scaffolding
+> grails generate-hida-ui different-scaffold:test.Employee
+generate from src/templates/different-scaffold, if you have such folder
 
 Check the generated views and controller. you might want to change some contents. esp. the JavaScript in index.gsp and singlepage.gsp
 
@@ -15,24 +17,24 @@ Check the generated views and controller. you might want to change some contents
 
 At the moment, you need to add new javascript assets: app/settings.js
 
+`
+// override whatever is required from core.settings.
+//= require core.settings
+//= require_self
 
-    // override whatever is required from core.settings.
-    //= require core.settings
-    //= require_self
-    
-    App.dt.config.table = {
-        // define dataTable columns
-        EmployeeType : { columns: [ { "data": "type" } ] }
-    };
-    
-    App.dt.config.customUrl = { /// for dataTable query
-    //        Asset : {
-    //            url : "only for custom",
-    //            data : function(){},
-    //            extraParams : function(request) { }
-    //        }
-    };
+App.dt.config.table = {
+    // define dataTable columns
+    EmployeeType : { columns: [ { "data": "type" } ] }
+};
 
+App.dt.config.customUrl = { /// for dataTable query
+//        Asset : {
+//            url : "only for custom",
+//            data : function(){},
+//            extraParams : function(request) { }
+//        }
+};
+`
 
 You also need to update Config.groovy
 
@@ -40,7 +42,7 @@ You also need to update Config.groovy
 	jodatime.format.org.joda.time.LocalDateTime="yyyy-MM-dd HH:mm"
 	grails.databinding.useSpringBinder = true
 
-	hida {
+	imms {
 		datepicker {
 			showValueOnEdit = true
 		}
