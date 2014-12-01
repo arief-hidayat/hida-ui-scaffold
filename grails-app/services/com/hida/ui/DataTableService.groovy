@@ -32,7 +32,7 @@ class DataTableService {
         def searchOptions = [offset: req.start, max: req.length]
         Class domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
         def searchResults = domainClz.search({
-            if(req.search.value) must(c(req.search.value))
+            if(req.search.value) must(queryString(req.search.value))
             for(DtReqColumn col : req.columns) {
                 if(col.search.value) {
                     if(!col.search.regex) term(col.data, col.search.value) //TODO: this works only for String value.
