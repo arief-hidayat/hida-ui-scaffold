@@ -5,8 +5,8 @@
 // You're free to add application-wide JavaScript to this file, but it's generally better 
 // to create separate JavaScript files as needed.
 //
-//= require jquery/jquery-${org.codehaus.groovy.grails.plugins.jquery.JQueryConfig.SHIPPED_VERSION}.min
-//= require jquery.dataTables
+//= require /lib/jquery/jquery-1.11.1.min
+//= require /lib/jquery.dataTables
 //= require_self
 
 (function($){
