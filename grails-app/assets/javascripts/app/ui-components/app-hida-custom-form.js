@@ -61,7 +61,8 @@
         },
         serializeForm : function(form) {
             var $form = form ? $(form) : this.$("form:first");
-            var formData = this.getFormDataWithFilter($form, function(k) { return $.trim(k.value) != ""; });
+            var formData = $form.hasClass("submit-nonempty-fields") ?
+                this.getFormDataWithFilter($form, function(k) { return $.trim(k.value) != ""; }) : this.getFormDataWithFilter($form);
 
             if(!formData.action) {
                 formData.action = $form.attr('action');
@@ -70,9 +71,15 @@
         },
         getFormDataWithFilter : function($form, filterCallback) {
             var formData = {};
-            _($form.serializeArray().filter(filterCallback)).each(function (nvp) {
-                formData[nvp.name] = nvp.value;
-            });
+            if(filterCallback) {
+                _($form.serializeArray().filter(filterCallback)).each(function (nvp) {
+                    formData[nvp.name] = nvp.value;
+                });
+            } else {
+                _($form.serializeArray()).each(function (nvp) {
+                    formData[nvp.name] = nvp.value;
+                });
+            }
             return formData;
         },
         initialize: function(opt) {
