@@ -77,7 +77,7 @@ class ${className}Controller {
 
         String msg = message(code: 'default.created.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), ${propertyName}.id])
         try {
-            ${propertyName}.save flush:true, failOnError: true
+            ${propertyName}.save failOnError: true
             if(params._partial) {
                 render(model: [${propertyName}: ${propertyName}], view: "_partialShow")
                 return
@@ -121,7 +121,7 @@ class ${className}Controller {
         }
         String msg = message(code: 'default.updated.message', args: [message(code: '${className}.label', default: '${className}'), ${propertyName}.id])
         try {
-            ${propertyName}.save flush:true, failOnError: true
+            ${propertyName}.save failOnError: true
             if(params._partial) {
                 render(model: [${propertyName}: ${propertyName}], view: "_partialShow")
                 return

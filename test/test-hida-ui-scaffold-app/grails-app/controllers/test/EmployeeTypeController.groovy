@@ -79,7 +79,7 @@ class EmployeeTypeController {
 
         String msg = message(code: 'default.created.message', args: [message(code: 'employeeType.label', default: 'EmployeeType'), employeeTypeInstance.id])
         try {
-            employeeTypeInstance.save flush:true, failOnError: true
+            employeeTypeInstance.save failOnError: true
             if(params._partial) {
                 render(model: [employeeTypeInstance: employeeTypeInstance], view: "_partialShow")
                 return
@@ -123,7 +123,7 @@ class EmployeeTypeController {
         }
         String msg = message(code: 'default.updated.message', args: [message(code: 'EmployeeType.label', default: 'EmployeeType'), employeeTypeInstance.id])
         try {
-            employeeTypeInstance.save flush:true, failOnError: true
+            employeeTypeInstance.save failOnError: true
             if(params._partial) {
                 render(model: [employeeTypeInstance: employeeTypeInstance], view: "_partialShow")
                 return
