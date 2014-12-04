@@ -6,6 +6,7 @@
 (function($, Backbone, _, moment, App){
     App.view.TableFormSinglePage = App.view.AbstractTableFormSinglePage.extend({
         setReadOnlyForm : function(options) {
+            options.readOnly = true;
             this.form = new App.view.CombinedForm(options);
         },
         setEditableForm : function(options) {
@@ -15,6 +16,7 @@
 
     App.view.TableFormTabs = App.view.AbstractTableFormTabs.extend({
         setReadOnlyForm : function(options) {
+            options.readOnly = true;
             this.form = new App.view.CombinedForm(options);
         },
         setEditableForm : function(options) {

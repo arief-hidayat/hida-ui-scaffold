@@ -71,14 +71,22 @@
         },
         getFormDataWithFilter : function($form, filterCallback) {
             var formData = {};
+            var serializedDataFunc = function (nvp) {
+                if(formData[nvp.name]) {
+                    if(!$.isArray(formData[nvp.name])) {
+                        var firstItem = formData[nvp.name];
+                        formData[nvp.name] = [];
+                        formData[nvp.name].push(firstItem);
+                    }
+                    formData[nvp.name].push(nvp.value);
+                } else {
+                    formData[nvp.name] = nvp.value;
+                }
+            };
             if(filterCallback) {
-                _($form.serializeArray().filter(filterCallback)).each(function (nvp) {
-                    formData[nvp.name] = nvp.value;
-                });
+                _($form.serializeArray().filter(filterCallback)).each(serializedDataFunc);
             } else {
-                _($form.serializeArray()).each(function (nvp) {
-                    formData[nvp.name] = nvp.value;
-                });
+                _($form.serializeArray()).each(serializedDataFunc);
             }
             return formData;
         },
