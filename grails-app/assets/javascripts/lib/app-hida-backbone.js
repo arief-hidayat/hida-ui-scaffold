@@ -5,8 +5,8 @@
 //= require /lib/backbone-min
 //= require_self
 
+_.templateSettings.variable = "rc";
 var pubSub = _.extend({},Backbone.Events); //http://blog.safaribooksonline.com/2013/10/02/decoupling-backbone-applications-with-pubsub/
-
 
 (function(Backbone, _, App){
     App.View = Backbone.View.extend({
