@@ -12,7 +12,7 @@ App.compositekeydelimiter = '_';
 App.dt = App.dt || { };
 App.dt.config = App.dt.config || {};
 
-App.url = "http://localhost:8080/my-app-here"; // please override
+App.url = App.url || "http://localhost:8080/my-app-here"; // please override
 
 App.css = App.css || {
     selected : 'danger'
@@ -26,11 +26,11 @@ App.datakey = App.datakey || {
     selectedRows : 'selectedRows'
 };
 
-App.logDebug = function(msg) { window.console&&console.log(msg);};
-App.logErr = function(msg) { window.console&&console.error(msg);};
+App.logDebug = App.logDebug || function(msg) { window.console&&console.log(msg);};
+App.logErr = App.logErr || function(msg) { window.console&&console.error(msg);};
 
-App.template = {};
+App.template =  App.template || {};
 
-App.template.select2  = {};
-App.template.select2.formatResult  = {};
-App.template.select2.formatSelection  = {};
+App.template.select2  = App.template.select2 || {};
+App.template.select2.formatResult  = App.template.select2.formatResult || {};
+App.template.select2.formatSelection  = App.template.select2.formatSelection || {};
