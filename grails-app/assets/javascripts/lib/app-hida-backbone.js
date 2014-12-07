@@ -5,7 +5,13 @@
 //= require /lib/backbone-min
 //= require_self
 
-_.templateSettings.variable = "rc";
+//_.templateSettings.variable = "rc";
+_.templateSettings = {
+    interpolate: /\<\@\=(.+?)\@\>/gim,
+    evaluate: /\<\@(.+?)\@\>/gim,
+    escape: /\<\@\-(.+?)\@\>/gim,
+    variable : 'rc'
+};
 var pubSub = _.extend({},Backbone.Events); //http://blog.safaribooksonline.com/2013/10/02/decoupling-backbone-applications-with-pubsub/
 
 (function(Backbone, _, App){
