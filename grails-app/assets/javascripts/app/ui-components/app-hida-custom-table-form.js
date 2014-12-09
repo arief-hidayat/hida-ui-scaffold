@@ -4,6 +4,54 @@
 (function($, Backbone, _, moment, App){
 
 
+    App.view.TableOnlyPage = App.view.TableRegion.extend({ // AbstractTableFormSinglePage without form. default action is only delete.
+        el: '#list-section',
+        otherInitialization : function(opt) {
+            var urlController = this.key.charAt(0).toLowerCase() + this.key.substr(1);
+            this.urlDeleteJSON = opt.urlDeleteJSON || (App.url + "/" + urlController + "/deleteJSON/");
+            this.urlDeleteConfirmationForm = opt.urlDeleteConfirmationForm; // optional
+            this.subscribeEvt("table:action:delete", this.deleteItems);
+            this.otherTableActions = opt.otherTableActions || this.otherTableActions || { }; // other than show, create, delete
+            for(var customAction in this.otherTableActions) {
+                if(this.otherTableActions.hasOwnProperty(customAction)) {
+                    this.subscribeEvt("table:action:" + customAction, this.otherTableActions[customAction]);
+                }
+            }
+        },
+        deleteItems : function(data) { // {selectedRows : selectedRows}
+            var ajaxArray = [], i, len;
+            for (i = 0, len = data.selectedRows.length; i < len; i += 1) {
+                var idAsParam = this.getIdAsParam(data, i);
+                if(idAsParam != undefined) {
+                    ajaxArray.push( this.postJSON(this.urlDeleteJSON, idAsParam));
+                }
+            }
+            if(ajaxArray.length > 0) {
+                $.when.apply(this, ajaxArray).done(function(){
+                    this.publishEvt("table:item:deleted", data.selectedRows);//TODO: onCreate... publish item:created
+                    this.reloadTable();
+                });
+            }
+        },
+        postJSON : function(url, option, callback) {
+            return $.ajax({
+                type: "POST",
+                url: url,
+                data: option || {},
+                success: callback || function(){},
+                dataType: "json",
+                context : this // make sure this BB view is the context
+            });
+        },
+        getIdAsParam:  function(eventData, idx) {
+            var opt = {};
+            if(eventData && eventData.selectedRows.length > 0) {
+                opt.id = eventData.selectedRows[idx || 0];
+            }
+            return opt;
+        }
+    });
+
     App.view.FormSinglePage = App.View.extend({
         el : '#content-section', formEl : '#detail-section', form : null,
         events : {
