@@ -93,6 +93,7 @@
             if(!this.canSelectRow()) return;
 
             var row = ev.currentTarget;
+            if($(row).find('td.dataTables_empty').length > 0) return;
             var id = this.getRowId(row);
             App.logDebug("clickRow table row#" + id);
             var selected = this.getSelectedRows();
@@ -144,7 +145,6 @@
         otherInitialization : function(opt) {
         },
         initialize: function(opt) {
-//            App.logDebug("init...TableRegion");
             this.customUrl = opt.customUrl;
             this.otherInitialization(opt);
             this.initView(opt);
