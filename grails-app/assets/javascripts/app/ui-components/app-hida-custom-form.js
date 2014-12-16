@@ -80,7 +80,8 @@
                     }
                     formData[nvp.name].push(nvp.value);
                 } else {
-                    formData[nvp.name] = nvp.value;
+                    if(nvp.value != "") formData[nvp.name] = nvp.value;
+                    else  formData[nvp.name] = null;
                 }
             };
             if(filterCallback) {

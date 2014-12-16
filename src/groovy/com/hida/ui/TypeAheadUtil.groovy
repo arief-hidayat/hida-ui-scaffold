@@ -11,17 +11,17 @@ class TypeAheadUtil {
         attrs.domain = domain; attrs.displayKey = displayKey;
 
         attrs.parentInstance = attrs.for ?: "ta$domain"; attrs.field = attrs.field ?: domainDisplayField;
-        if(attrs.populatedFieldsConf == null) {
-            attrs.populatedFieldsConf = [:]
+        if(!attrs.populatedFieldsConf) attrs.populatedFieldsConf = [:]
+        if(attrs.populatedFieldsConf.isEmpty()) {
             if(domainIdField) attrs.populatedFieldsConf.put(domainIdField, 'id')
             attrs.populatedFieldsConf.put(domainDisplayField, displayKey)
         }
         if(attrs.parentValue) {
-            attrs.value = attrs.value ?: attrs.parentValue[domainDisplayField]
+            attrs.value = attrs.value ?: attrs.parentValue["${attrs.field}"]
             if(!attrs.fields && !(attrs.populatedFieldsConf).isEmpty()) {
                 def fieldData = [:]
                 attrs.populatedFieldsConf.each { String fieldNm, v ->
-                    fieldData[fieldNm] = attrs.parentValue[fieldNm]
+                    fieldData[v] = attrs.parentValue[fieldNm]
                 }
                 attrs.fields = fieldData
             }
