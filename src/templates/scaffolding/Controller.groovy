@@ -89,6 +89,7 @@ class ${className}Controller {
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
@@ -136,6 +137,7 @@ class ${className}Controller {
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
@@ -194,6 +196,7 @@ class ${className}Controller {
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
