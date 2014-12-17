@@ -15,7 +15,6 @@
 (function($, Backbone, App){
 
     App.dataTableOptions = function($root, key, enableRowCallback, customUrl) { // key is domainName e.g. asset, but it might be customized i.e. workOrder/closed
-        console.log("dataTableOptions key : "+ key);
             var tableConf = App.dt.config.table[key] || {};
         var customUrlConf = customUrl || {};
 
