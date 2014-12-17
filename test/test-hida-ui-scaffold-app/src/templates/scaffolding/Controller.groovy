@@ -59,11 +59,13 @@ class ${className}Controller {
     @Transactional
     def save(${className} ${propertyName}) {
         if (${propertyName} == null) {
+            transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
         if (${propertyName}.hasErrors()) {
+            transactionStatus.setRollbackOnly()
             if(params._partial) {
                 response.status = 412
                 render(model: [${propertyName}: ${propertyName}], view: "_partialCreate")
@@ -83,9 +85,11 @@ class ${className}Controller {
                 return
             }
         } catch(Exception e) {
+            transactionStatus.setRollbackOnly()
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
@@ -106,11 +110,13 @@ class ${className}Controller {
     @Transactional
     def update(${className} ${propertyName}) {
         if (${propertyName} == null) {
+            transactionStatus.setRollbackOnly()
             notFound()
             return
         }
 
         if (${propertyName}.hasErrors()) {
+            transactionStatus.setRollbackOnly()
             if(params._partial) {
                 response.status = 412
                 render(model: [${propertyName}: ${propertyName}], view: "_partialEdit")
@@ -127,9 +133,11 @@ class ${className}Controller {
                 return
             }
         } catch(Exception e) {
+            transactionStatus.setRollbackOnly()
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
@@ -150,6 +158,7 @@ class ${className}Controller {
     def deleteJSON() {
         ${className} ${propertyName} = ${className}.get(params.id)
         if(${propertyName} == null) {
+            transactionStatus.setRollbackOnly()
             renderJsonMessage(message(code: 'default.not.found.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), params.id]), params, NOT_FOUND)
 
             return
@@ -159,6 +168,7 @@ class ${className}Controller {
             renderJsonMessage(message(code: 'default.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), ${propertyName}.id]), params, OK)
 
         } catch(Exception e) {
+            transactionStatus.setRollbackOnly()
             log.error("Failed to delete ${className}. params \${params}", e)
             renderJsonMessage(message(code: 'default.not.deleted.message', args: [message(code: '${domainClass.propertyName}.label', default: '${className}'), ${propertyName}.id]), params, INTERNAL_SERVER_ERROR)
 
@@ -169,6 +179,7 @@ class ${className}Controller {
     def delete(${className} ${propertyName}) {
 
         if (${propertyName} == null) {
+            transactionStatus.setRollbackOnly()
             notFound()
             return
         }
@@ -181,9 +192,11 @@ class ${className}Controller {
                 return
             }
         } catch(Exception e) {
+            transactionStatus.setRollbackOnly()
             if(params._partial) {
                 response.status = 500
                 if (!${propertyName}.hasErrors()) {
+                    while(e.cause) e = e.cause
                     flash.message = e.getMessage()
                 }
                 render(model: [${propertyName}: ${propertyName}], view: "_message")
