@@ -44,12 +44,15 @@ class BsTypeAheadTagLib {
                 sb.append("readonly='readonly' ")
                 sb.append("data-readonly='").append(attrs.readonly).append("' ")
             }
+            if(attrs.dependsOnTypeAhead) {
+                sb.append("data-ta-dependency='").append(attrs.dependsOnTypeAhead).append("' ")
+            }
             sb.append("data-domain='").append(domain).append("' ")
             if(displayKey) sb.append("data-display-key='").append(displayKey).append("' ")
             if(attrs.items)  sb.append("data-items='").append(attrs.items).append("' ")
             if(attrs.minLength)  sb.append("data-minlength='").append(attrs.minLength).append("' ")
             if(attrs.sourceUrl)  sb.append("data-sourceurl='").append(attrs.sourceUrl).append("' ")
-            if(attrs.publishEvt)  sb.append("data-publishevt='true' ")
+            if(attrs.publishEvt)  sb.append("data-publish-evt='true' ")
             if(attrs.value) sb.append("value='").append(attrs.value).append("' ")
             sb.append("placeholder='").append(attrs.placeholder ?: placeholder).append("'/>")
 //            sb.append("<div id='").append(field).append("-values'>")
@@ -67,7 +70,7 @@ class BsTypeAheadTagLib {
             if(displayKey) sb.append("data-display-key='").append(displayKey).append("' ")
             if(attrs.items)  sb.append("data-items='").append(attrs.items).append("' ")
             if(attrs.minLength)  sb.append("data-minLength='").append(attrs.minLength).append("' ")
-            if(attrs.publishEvt)  sb.append("data-publishevt='true' ")
+            if(attrs.publishEvt)  sb.append("data-publish-evt='true' ")
             if(attrs.sourceUrl)  sb.append("data-sourceurl='").append(attrs.sourceUrl).append("' ")
             if(attrs.value) sb.append("value='").append(attrs.value).append("' ")
             sb.append("placeholder='").append(attrs.placeholder ?: placeholder).append("'/>")

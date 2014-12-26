@@ -114,10 +114,12 @@
             _.each($typeAhead, function(elem){
                 var dpEl = this.$el.selector + " #" + elem.id;
 //                App.logDebug("setup type ahead dpEl:"+ dpEl);
-                if($(dpEl).data('readonly') != "true") { // add this checking. TODO: verify
-                    this.typeAheadFields.push(new App.view.TypeAhead({ el : dpEl, pubSub : this.pubSub}));
+                if($(dpEl).data('readonly') != "true") {
+                    var typeAheadView = new App.view.TypeAhead({ el : dpEl, pubSub : this.pubSub});
+                    this.typeAheadFields.push(typeAheadView);
                 }
             }, this);
+
         },
         setupSelect2 : function(readOnly, parentEl) {
             var $select2Simples = parentEl == undefined ? this.$(".select2-simple") : this.$(parentEl + " .select2-simple");

@@ -23,7 +23,10 @@
             if(this.$values != undefined) {
                 this.$values.children("input").each(function(){
                     var $this = $(this);
-                    if($this.data("field")) $this.val('');
+                    if($this.data("field")) {
+                        $this.val('');
+                        if(this.publishSearch) this.publishEvt("ta:search:" + this.field, null);
+                    }
                 });
             }
         },
@@ -45,7 +48,9 @@
             }
             if(item) {
                 this.onValidSelectedItem(item);
-                if(this.publishSearch) this.publishEvt("ta:search:" + this.field, item);
+                if(this.publishSearch) {
+                    this.publishEvt("ta:search:" + this.field, item);
+                }
             }
         },
         onValidSelectedItem : function(item) {
@@ -67,6 +72,39 @@
             this.$el.attr('autocomplete', 'off');
             //http://stackoverflow.com/questions/14901535/bootstrap-typeahead-ajax-result-format-example/14959406#14959406
             //http://tatiyants.com/how-to-use-json-objects-with-twitter-bootstrap-typeahead/
+//            var typeAheadOpt = {};
+//            if(this.$el.data('items')) { typeAheadOpt.items = this.$el.data('items') }
+//            if(this.$el.data('minlength')) { typeAheadOpt.minLength = this.$el.data('minlength') }
+//            if(!this.$el.data("source")) {
+//                $.extend(typeAheadOpt, {
+//                    isObjectItem : true, displayKey : this.displayKey, autoSelect : false,
+//                    remoteUrl : this.$el.data("sourceurl") || App.url + "/typeAhead/" + this.key,
+//                    remoteDefaultOpts : $.extend(opt.filter || {}, { max : 50})
+//                })
+//            }
+//            this.$el.typeahead(typeAheadOpt);
+            this.initTypeAheadComponent(opt.filter);
+            this.publishSearch = opt.publishSearch || this.$el.data('publish-evt') || this.publishSearch;
+            if(this.publishSearch) {
+                App.logDebug(this.field + " is set to publish event. override : " + this.publishSearch);
+            }
+            this.$el.on('keyup', $.proxy(this.checkOnDelete, this)); // make sure it's reset.
+
+
+            var taDependency = this.$el.data('ta-dependency'); // 'data-ta-dependency="typeAheadField:filterName:dependencyFieldName"
+            if(taDependency) {
+                var taDepArr = taDependency.split(":", 3);
+                var taDepTaField = taDepArr[0], taFilterNm = taDepArr[1], taDepDependencyFieldNm = taDepArr[2];
+                this.subscribeEvt("ta:search:"+taDepTaField, function(item) { //taDepTaField must exist and publish its event.
+                    var filter = {};
+                    if(item) {
+                        filter[taFilterNm] = item[taDepDependencyFieldNm]; // limited only for passing id.
+                    }
+                    this.changeUrlFilter(filter);
+                });
+            }
+        },
+        initTypeAheadComponent : function(filter) {
             var typeAheadOpt = {};
             if(this.$el.data('items')) { typeAheadOpt.items = this.$el.data('items') }
             if(this.$el.data('minlength')) { typeAheadOpt.minLength = this.$el.data('minlength') }
@@ -74,19 +112,10 @@
                 $.extend(typeAheadOpt, {
                     isObjectItem : true, displayKey : this.displayKey, autoSelect : false,
                     remoteUrl : this.$el.data("sourceurl") || App.url + "/typeAhead/" + this.key,
-                    remoteDefaultOpts : $.extend(opt.filter || {}, { max : 50})
-                })
+                    remoteDefaultOpts : $.extend(filter || {}, { max : 10})
+                });
             }
             this.$el.typeahead(typeAheadOpt);
-            if(this.$el.data("publishevt")) {
-                App.logDebug(this.field + " is set to publish event.");
-                this.publishSearch = true;
-            }
-            if(opt.publishSearch) {
-                this.publishSearch = opt.publishSearch;
-                App.logDebug(this.field + " is set to publish event. override : " + this.publishSearch);
-            }
-            this.$el.on('keyup', $.proxy(this.checkOnDelete, this)); // make sure it's reset.
         },
         checkOnDelete : function(e) {
             switch(e.keyCode) {
@@ -100,6 +129,13 @@
                 default:
                 break;
             }
+        },
+        changeUrlFilter : function(filter) {
+            App.logDebug(">>> change typeAhead url filter for field: " + this.field);
+            if(this.$el.data('typeahead')) {
+                this.$el.data('typeahead').destroy();
+            }
+            this.initTypeAheadComponent(filter);
         },
         remove: function() {
             if(this.$el.data('typeahead')) {
