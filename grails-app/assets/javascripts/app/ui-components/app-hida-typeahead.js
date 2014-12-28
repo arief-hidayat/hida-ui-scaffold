@@ -91,16 +91,22 @@
             this.$el.on('keyup', $.proxy(this.checkOnDelete, this)); // make sure it's reset.
 
 
-            var taDependency = this.$el.data('ta-dependency'); // 'data-ta-dependency="typeAheadField:filterName:dependencyFieldName"
+            var taDependency = this.$el.data('ta-dependency');
             if(taDependency) {
-                var taDepArr = taDependency.split(":", 3);
-                var taDepTaField = taDepArr[0], taFilterNm = taDepArr[1], taDepDependencyFieldNm = taDepArr[2];
-                this.subscribeEvt("ta:search:"+taDepTaField, function(item) { //taDepTaField must exist and publish its event.
-                    var filter = {};
-                    if(item) {
-                        filter[taFilterNm] = item[taDepDependencyFieldNm]; // limited only for passing id.
-                    }
-                    this.changeUrlFilter(filter);
+                // 'data-ta-dependency="typeAheadField:filterName:dependencyFieldName"
+//                var taDepArr = taDependency.split(":", 3);
+//                var taDepTaField = taDepArr[0], taFilterNm = taDepArr[1], taDepDependencyFieldNm = taDepArr[2];
+//                this.subscribeEvt("ta:search:"+taDepTaField, function(item) { //taDepTaField must exist and publish its event.
+//                    var filter = {};
+//                    if(item) {
+//                        filter[taFilterNm] = item[taDepDependencyFieldNm]; // limited only for passing id.
+//                    }
+//                    this.changeUrlFilter(filter);
+//                });
+
+                // 'data-ta-dependency="typeAheadField" will pass item as filter without modification
+                this.subscribeEvt("ta:search:"+taDependency, function(item) { //taDepTaField must exist and publish its event.
+                    this.changeUrlFilter(item);
                 });
             }
         },
