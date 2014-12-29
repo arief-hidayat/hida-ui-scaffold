@@ -120,6 +120,17 @@
                 }
             }, this);
 
+            var $taDependentFields = parentEl == undefined ? this.$(".display-from-typeahead") : this.$(parentEl + " .display-from-typeahead");
+            _.each($taDependentFields, function(elem){
+                var $theField = $(elem);
+                var theTypeAheadNm = $theField.data('ta-dependency');
+                if(theTypeAheadNm) {
+                    var sp = theTypeAheadNm.split(":", 2);
+                    this.subscribeEvt('ta:search:' + sp[0], function(item){
+                        $theField.val(item[sp[1]]);
+                    });
+                }
+            }, this);
         },
         setupSelect2 : function(readOnly, parentEl) {
             var $select2Simples = parentEl == undefined ? this.$(".select2-simple") : this.$(parentEl + " .select2-simple");
