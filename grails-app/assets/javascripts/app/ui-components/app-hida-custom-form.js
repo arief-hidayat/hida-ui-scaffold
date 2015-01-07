@@ -94,11 +94,13 @@
         initialize: function(opt) {
             this.formId = opt.formId; // seems like not used
             this.readOnly = opt.readOnly || this.readOnly;
-            this.setupDatePickerFields();
-            this.setupTypeAheadFields();
-            this.setupSelect2(this.readOnly);
-
-//            this.setupManyToManyFields(this.readOnly);
+            this.setupUiComponents();
+        },
+        setupUiComponents : function(parentEl) {
+            this.setupDatePickerFields(parentEl);
+            this.setupTypeAheadFields(parentEl);
+            this.setupSelect2(this.readOnly, parentEl);
+            if(App.view.form && App.view.form.moreUiSetup) App.view.form.moreUiSetup.apply(this, [parentEl]);
         },
         setupDatePickerFields : function(parentEl) {
             var $datePickers = parentEl == undefined ? this.$(".date") : this.$(parentEl + " .date");
@@ -193,15 +195,6 @@
                 this.select2Els.push(mmEl);
             }, this);
         }
-//        ,
-//        setupManyToManyFields : function(readOnly) {
-//            //might be set as deprecated
-//            _.each(this.$(".many-to-many"), function(elem){
-//                var mmEl = this.$el.selector + " #" + elem.id; // so many-to-many element must have ID
-//                this.manyToManyFields.push(new App.view.ManyToManyView({ el : mmEl, pubSub : this.pubSub, readOnly : readOnly}));
-//            }, this);
-//
-//        }
     });
 
     App.view.CombinedFormWithEmbeddedTable = App.view.CombinedForm.extend({
@@ -213,9 +206,7 @@
             App.logDebug("add "+ tablePrefix + " row "+ i);
             this.getHtml(App.url + relativeUrl, {i : i}, function(row) {
                 $lastRow.before(row);
-                this.setupTypeAheadFields(newRowEl);
-                this.setupDatePickerFields(newRowEl);
-                this.setupSelect2(this.readOnly, newRowEl);
+                this.setupUiComponents(newRowEl);
             } );
         },
         deleteRow : function(e) {

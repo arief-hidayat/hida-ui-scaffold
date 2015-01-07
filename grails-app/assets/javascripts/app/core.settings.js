@@ -34,3 +34,6 @@ App.template =  App.template || {};
 App.template.select2  = App.template.select2 || {};
 App.template.select2.formatResult  = App.template.select2.formatResult || {};
 App.template.select2.formatSelection  = App.template.select2.formatSelection || {};
+
+
+App.view.form = App.view.form || {};
