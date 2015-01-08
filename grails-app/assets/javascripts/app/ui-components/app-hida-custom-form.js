@@ -198,16 +198,20 @@
     });
 
     App.view.CombinedFormWithEmbeddedTable = App.view.CombinedForm.extend({
-        addEmbeddedTableRow : function(tablePrefix, relativeUrl) { // #labors
+        addEmbeddedTableRow : function(tablePrefix, relativeUrl, otherCallback) { // #labors
             var $table = this.$(tablePrefix + "-table");
             var i = $table.find("tbody tr").length - 1;
             var newRowEl = tablePrefix + i; // this should match _shift.gsp
             var $lastRow = $table.find("tbody tr:eq("+ i +")");
             App.logDebug("add "+ tablePrefix + " row "+ i);
-            this.getHtml(App.url + relativeUrl, {i : i}, function(row) {
-                $lastRow.before(row);
-                this.setupUiComponents(newRowEl);
-            } );
+            var successCallback = (function(newRowEl, otherCallback) {
+                return function(row) {
+                    $lastRow.before(row);
+                    this.setupUiComponents(newRowEl);
+                    if(otherCallback) otherCallback(newRowEl);
+                }
+            })(newRowEl, otherCallback);
+            this.getHtml(App.url + relativeUrl, {i : i}, successCallback );
         },
         deleteRow : function(e) {
             App.logDebug(" delete row ");
