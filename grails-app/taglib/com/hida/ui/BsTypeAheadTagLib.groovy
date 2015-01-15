@@ -40,6 +40,9 @@ class BsTypeAheadTagLib {
 
         if(!parentInstance) { // case without parentInstance and field
             sb.append("<input class='form-control type-ahead' id='").append(id).append("' ")
+            if(attrs.field) {
+                sb.append("data-field='").append(attrs.field).append("' ")
+            }
             if(attrs.readonly) {
                 sb.append("readonly='readonly' ")
                 sb.append("data-readonly='").append(attrs.readonly).append("' ")
