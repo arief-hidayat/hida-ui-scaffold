@@ -261,6 +261,7 @@
             this.subscribeEvt("table:action:edit", this.loadForm(this.urlEditForm)); // is this used?
             for(var customAction in this.otherTableActions) {
                 if(this.otherTableActions.hasOwnProperty(customAction)) {
+                    console.log (">>> custom action :" + customAction);
                     this.subscribeEvt("table:action:" + customAction, this.otherTableActions[customAction]);
                 }
             }

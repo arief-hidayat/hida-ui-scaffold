@@ -155,8 +155,8 @@
             var $btn = $(ev.currentTarget);
             var callback = $btn.data("callback");
             var selectedRows = this.tableView.getSelectedRows();
-            if(callback != undefined && this[callback] != undefined) {
-                this[callback].call(this, selectedRows);
+            if(callback != undefined) {
+                if(this[callback] != undefined) this[callback].call(this, selectedRows);
                 this.publishEvt("table:action:" + callback, {selectedRows : selectedRows});
             }
         },
