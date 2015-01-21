@@ -43,6 +43,7 @@ grails.project.dependency.resolution = {
     plugins {
         compile (":scaffolding:2.0.3")
         compile ":asset-pipeline:1.9.9"
+        compile ":sass-asset-pipeline:1.9.0"
         compile ":joda-time:1.5"
         runtime ":hibernate:3.6.10.16", {export = false}
         build(":release:3.0.1",
