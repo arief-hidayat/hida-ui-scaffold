@@ -76,7 +76,7 @@ You also need to update Config.groovy
 
 # Limitation
 
-Known to be incompatible with hibernate:3.6.10.18.
+Default API is incompatible with hibernate:3.6.10.18.
 You need to override the implementation in DataTableService.
 
 

@@ -76,7 +76,7 @@
  				sb << ' readonly="\${show ?: false}"'
 				sb << '/>'
             } else if (cp.inList) {
-				sb << '<g:select class="form-control" name="' << property.name << '"'
+				sb << '<g:select class="form-control select2-simple" name="' << property.name << '"'
 				sb << ' from="${' << "${domainInstance}.constraints.${property.name}.inList" << '}"'
 				if (isRequired()) sb << ' required=""'
 				sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'

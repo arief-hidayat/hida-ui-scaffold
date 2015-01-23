@@ -42,13 +42,17 @@ grails.project.dependency.resolution = {
 
     plugins {
         compile (":scaffolding:2.0.3")
-        compile ":asset-pipeline:1.9.9"
-        compile ":sass-asset-pipeline:1.9.2"
+        compile ":asset-pipeline:2.1.0"
         compile ":joda-time:1.5"
         runtime ":hibernate:3.6.10.16", {export = false}
         build(":release:3.0.1",
               ":rest-client-builder:2.0.3") {
             exclude 'grails-datastore-gorm'
+            export = false
+        }
+
+        provided(  ":tomcat:7.0.54" ) {
+            // this is a plugin only plugin, should not be transitive to the application
             export = false
         }
     }

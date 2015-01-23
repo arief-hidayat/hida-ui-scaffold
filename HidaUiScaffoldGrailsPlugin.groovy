@@ -10,10 +10,11 @@ class HidaUiScaffoldGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
             "grails-app/views/error.gsp",
+            "grails-app/views/index.gsp",
             "grails-app/views/employee*/**",
-            "grails-app/domain/**",
-            "grails-app/controller/test/**",
-            "test/test-hida-ui-scaffold-app/grails-app/assets/javascripts/app/settings.js"
+            "grails-app/domain/test/Employee*",
+            "grails-app/controller/test/Employee*",
+            "grails-app/assets/javascripts/app/settings.js"
     ]
 
     // TODO Fill in these fields

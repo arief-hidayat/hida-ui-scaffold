@@ -21,3 +21,41 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+
+jodatime.format.org.joda.time.LocalDate = "yyyy-MM-dd"
+jodatime.format.org.joda.time.LocalDateTime = "yyyy-MM-dd HH:mm"
+jodatime.format.org.joda.time.LocalTime = "HH:mm"
+grails.databinding.useSpringBinder = true
+hida {
+    datepicker {
+        showValueOnEdit = true
+    }
+    singlePage = ["EmployeeType"] //TODO: add any views to be displayed as singlePage
+    datatable {
+        singlepage {
+            width {
+//                StockInTxn = 3 // to override width.
+            }
+        }
+        compositekeydelimiter = '_'
+        rowclass = [:]
+        domainkey = [
+                //            Asset : ["firstKey", "secondKey"] // for composite id
+        ]
+        domainfields = [ // TODO: to be displayed as table columns
+                         Employee : ["code", "jobTitle", "fullName", "type"],
+                         EmployeeType : ["type"]
+        ]
+    }
+
+    typeahead {
+        ignoreCase = true
+        displayKey = [
+                Employee : "code", EmployeeType: "type"
+        ]
+        populatedFields {
+            employeeInstance = [:]
+        }
+    }
+}
+
