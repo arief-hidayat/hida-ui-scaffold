@@ -2,8 +2,6 @@
 //= require_self
 
 (function($, Backbone, _, moment, App){
-
-
     App.view.TableOnlyPage = App.view.TableRegion.extend({ // AbstractTableFormSinglePage without form. default action is only delete.
         el: '#list-section',
         otherInitialization : function(opt) {

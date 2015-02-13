@@ -73,7 +73,10 @@
             this.setSelectedRows(opt.selectedRows || []);
 
             this.otherInitialization(opt);
-            this.$el.dataTable( App.dataTableOptions(this.$el, this.key, this.canSelectRow(), this.customUrl)); // true, enable row callback.
+            var theDataTable = this.$el.dataTable( App.dataTableOptions(this.$el, this.key, this.canSelectRow(), this.customUrl)); // true, enable row callback.
+            if(App.dt.config.makeEditable) {
+                theDataTable.makeEditable(App.dt.config.makeEditable);
+            }
             this.subscribeEvt("table:row:select", function(data){
                 App.logDebug("select key " + data.key + ", id " + data.rowId);
             });
