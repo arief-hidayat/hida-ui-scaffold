@@ -13,7 +13,7 @@ class HidaUiScaffoldGrailsPlugin {
             "grails-app/views/index.gsp",
             "grails-app/views/employee*/**",
             "grails-app/domain/test/Employee*",
-            "grails-app/controller/test/Employee*",
+            "grails-app/controllers/test/Employee*",
             "grails-app/assets/javascripts/app/settings.js"
     ]
 
