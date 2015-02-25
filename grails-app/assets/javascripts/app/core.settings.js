@@ -37,3 +37,7 @@ App.template.select2.formatSelection  = App.template.select2.formatSelection || 
 
 
 App.view.form = App.view.form || {};
+
+App.onLoggedOut = function() {
+    window.location = App.url;
+};

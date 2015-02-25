@@ -10,6 +10,21 @@
 //= require_self
 
 (function($, App){
+
+    $.ajaxSetup({
+//        beforeSend : function(xhr, event) {
+//        },
+        statusCode: {
+            // Set up a global AJAX error handler to handle the 401
+            // unauthorized responses. If a 401 status code comes back,
+            // the user is no longer logged-into the system and can not
+            // use it properly.
+            401: function() {
+                App.onLoggedOut();
+            }
+        }
+    });
+
     $.fn.datetimepicker.defaults = {
         pickDate: true,                 //en/disables the date picker
         pickTime: true,                 //en/disables the time picker
