@@ -25,6 +25,15 @@ class TypeAheadUtil {
                 }
                 attrs.fields = fieldData
             }
+        } else {
+            if(!attrs.fields && !(attrs.populatedFieldsConf).isEmpty()) {
+                if(domainIdField) {
+                    attrs.fields = [:]
+                    attrs.populatedFieldsConf.each { String fieldNm, originalFieldNm ->
+                        attrs.fields.put(originalFieldNm, fieldNm == displayKey ? attrs.value : null )
+                    }
+                }
+            }
         }
     }
 }
