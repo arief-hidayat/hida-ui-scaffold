@@ -100,7 +100,11 @@
             this.setupDatePickerFields(parentEl);
             this.setupTypeAheadFields(parentEl);
             this.setupSelect2(this.readOnly, parentEl);
-            if(App.view.form && App.view.form.moreUiSetup) App.view.form.moreUiSetup.apply(this, [parentEl]);
+            App.logDebug("done setup select2");
+            if(App.view.form && App.view.form.moreUiSetup) {
+                App.logDebug("setting up App.view.form.moreUiSetup");
+                App.view.form.moreUiSetup.apply(this, [parentEl]);
+            }
         },
         setupDatePickerFields : function(parentEl) {
             var $datePickers = parentEl == undefined ? this.$(".date") : this.$(parentEl + " .date");
@@ -177,7 +181,7 @@
                         App.logDebug("initSelection , domainId " + domainId);
                         if(domainId) {
                             App.logDebug("init debug. call " + initUrl);
-                            $.ajax(initUrl, {data : {id : domainId}, dataType: dataType}).done(function(data) { callback(data); });
+                            $.ajax({ url: initUrl, data : {id : domainId}, dataType: dataType}).done(function(data) { callback(data); });
                         }
                     }
                 }
@@ -187,8 +191,7 @@
                             $mmEl.select2("data", data);
                         };
                     })($mmEl);
-                    App.logDebug("load initial data");
-                    $.ajax(initUrl, {data : {id : domainId}, dataType: dataType}).done(renderDataCallback);
+                    $.ajax({ url: initUrl, data : {id : domainId}, dataType: dataType}).done(renderDataCallback);
                 }
                 var $select2 = $mmEl.select2(select2Opts);
                 if(isReadOnly) $select2.select2("readonly", true);
