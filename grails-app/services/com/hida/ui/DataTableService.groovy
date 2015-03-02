@@ -73,7 +73,9 @@ class DataTableService {
             }
             additionalFilter.each {
                 String fieldFilter, String fieldValue ->
-                    eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
+                    def actualFieldVal = getValue(fieldValue)
+                    if(actualFieldVal instanceof String) eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
+                    else eq(fieldFilter, getValue(fieldValue))
             }
             for(DtReqOrder ord : req.orders)
                 order(req.columns.get(ord.column).data, ord.dir)
@@ -101,7 +103,9 @@ class DataTableService {
     }
 
     protected def getValue(String data) {
-        if( data ==~ /\d+/) return Long.parseLong(data)
+        if( data ==~ /\d+/) {
+            return Long.parseLong(data)
+        }
         else if( data ==~ /\d+[.]\d+/) return new BigDecimal(data)
         return data
     }
