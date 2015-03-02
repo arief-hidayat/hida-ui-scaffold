@@ -132,7 +132,7 @@
             if($formContainer) {
                 var $idField = $formContainer.find("[name='id']");
                 if($idField) {
-                    App.logDebug("form Id :" + $idField.val());
+//                    App.logDebug("form Id :" + $idField.val());
                     return {'id' : $idField.val()};
                 }
             }
@@ -158,7 +158,7 @@
                 { action : "show"}, {  action : "create"}, true);
         },
         onUpdateForm : function(dt) {
-            App.logDebug("onUpdateForm ..." );
+//            App.logDebug("onUpdateForm ..." );
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
                 { id : form.id, action : "show"}, { id : form.id, action : "update"}, true);
@@ -225,7 +225,7 @@
 
     App.view.AbstractTableFormSinglePage = App.View.extend({
         el : '#content-section', tableEl : '#list-section', formEl : '#detail-section',
-        table : null, form : null,
+        table : null, form : null, tableCustomUrl : null,
         events : {
         },
         remove: function() {
@@ -288,7 +288,7 @@
         },
         loadForm : function(url, action) {
             return function(eventData) {
-                App.logDebug("enter loadForm from url" + url);
+//                App.logDebug("enter loadForm from url" + url);
                 if(!action) {
                     if(url == this.urlCreateForm) action = "create";
                     else if(url == this.urlShowForm) action = "show";
@@ -331,7 +331,7 @@
         },
         deleteItems : function(data) { // {selectedRows : selectedRows}
             var ajaxArray = [], i, len, formId = this.getFormId(), resetForm = false;
-            App.logDebug("deleteItems... formId=" + formId);
+//            App.logDebug("deleteItems... formId=" + formId);
 
             for (i = 0, len = data.selectedRows.length; i < len; i += 1) {
                 if(formId) {
@@ -348,7 +348,7 @@
             }
             if(ajaxArray.length > 0) {
                 $.when.apply(this, ajaxArray).done(function(){
-                    App.logDebug("rebuild table ");
+//                    App.logDebug("rebuild table ");
                     this.publishEvt("table:item:deleted", data.selectedRows);//TODO: onCreate... publish item:created
                     this.buildTable(true);
                 });
@@ -404,7 +404,7 @@
             if($formContainer) {
                 var $idField = $formContainer.find("[name='id']");
                 if($idField) {
-                    App.logDebug("form Id :" + $idField.val());
+//                    App.logDebug("form Id :" + $idField.val());
                     return {'id' : $idField.val()};
                 }
             }
@@ -433,7 +433,7 @@
                 { action : "show"}, {  action : "create"}, true);
         },
         onUpdateForm : function(dt) {
-            App.logDebug("onUpdateForm ..." );
+//            App.logDebug("onUpdateForm ..." );
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
                 { id : form.id, action : "show"}, { id : form.id, action : "update"}, true);

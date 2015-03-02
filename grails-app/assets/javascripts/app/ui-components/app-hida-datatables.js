@@ -62,14 +62,12 @@
         otherInitialization : function(opt) {
         },
         initialize: function(opt) {
-//            App.logDebug("init...Table");
             this.selectionMode = opt.selectionMode || "single";
             this.getRowId = opt.getRowId || this.getRowId;
             this.indexOfSelectedId = opt.indexOfSelectedId || this.indexOfSelectedId;
 
             this.pk = opt.pk || this.pk;
             this.customUrl = opt.customUrl || this.getCustomUrl();
-
             this.setSelectedRows(opt.selectedRows || []);
 
             this.otherInitialization(opt);
@@ -78,10 +76,10 @@
                 theDataTable.makeEditable(App.dt.config.makeEditable);
             }
             this.subscribeEvt("table:row:select", function(data){
-                App.logDebug("select key " + data.key + ", id " + data.rowId);
+//                App.logDebug("select key " + data.key + ", id " + data.rowId);
             });
             this.subscribeEvt("table:row:deselect", function(data){
-                App.logDebug("deselect key " + data.key + ", id " + data.rowId);
+//                App.logDebug("deselect key " + data.key + ", id " + data.rowId);
             });
 
 //            this.subscribeEvt("item:deleted", this.deleteRow);
@@ -97,7 +95,7 @@
             var row = ev.currentTarget;
             if($(row).find('td.dataTables_empty').length > 0) return;
             var id = this.getRowId(row);
-            App.logDebug("clickRow table row#" + id);
+//            App.logDebug("clickRow table row#" + id);
             var selected = this.getSelectedRows();
             var index = this.indexOfSelectedId(id);
             if ( index === -1 ) {
@@ -124,7 +122,7 @@
             return $.inArray(id, selected);
         },
         remove: function() {
-//            App.logDebug("destroy table");
+//            App.logDebug(">> destroy table");
             this.$el.DataTable().destroy();
             return App.View.prototype.remove.apply(this, arguments);
         },
@@ -164,13 +162,13 @@
             }
         },
         create : function(selectedRow) {
-            App.logDebug("create...");
+//            App.logDebug("create...");
         },
         show : function(selectedRow) {
-            App.logDebug("show... selectedRow:" + selectedRow);
+//            App.logDebug("show... selectedRow:" + selectedRow);
         },
         delete : function(selectedRow) {
-            App.logDebug("delete... selectedRow:" + selectedRow);
+//            App.logDebug("delete... selectedRow:" + selectedRow);
         },
         // seems not used.
 //        deleteRowById : function(id) {
