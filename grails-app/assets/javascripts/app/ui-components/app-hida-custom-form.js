@@ -36,14 +36,16 @@
         },
         submitForm : function(evt) {
             var $btn = $(evt.currentTarget);
-            $btn.attr('disabled','disabled');
+//            $btn.attr('disabled','disabled');
             if($btn.data("nojs")) {
                 var $form = $btn.closest("form");
                 if($btn.data("url")) {
                     $form.attr("action", $btn.data("url"));
                 }
-                $form.submit();
-                $btn.removeAttr('disabled');
+                $form.submit(function(){
+                    $form.submit(function(){ return false; });
+                });
+//                $btn.removeAttr('disabled');
                 return false;
             }
             var form = this.serializeForm();
@@ -56,7 +58,7 @@
             } else {
                 App.logErr("Must set data-action and/or data-url in the button ");
             }
-            $btn.removeAttr('disabled');
+//            $btn.removeAttr('disabled');
             return false;
         },
         serializeForm : function(form) {
