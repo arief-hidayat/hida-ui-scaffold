@@ -18,12 +18,15 @@ class DefaultMessageTagLib {
         if(attrs.flash) {
             if(attrs.flash.error) {
                 out << "<p class='bg-danger' " + addPadding() + ">" + attrs.flash.error + "</p>"
+                attrs.flash.error = null
             }
             if(attrs.flash.warning) {
                 out << "<p class='bg-warning' " + addPadding() + ">" + attrs.flash.warning + "</p>"
+                attrs.flash.warning = null
             }
             if(attrs.flash.info) {
                 out << "<p class='bg-info' " + addPadding() + ">" + attrs.flash.info + "</p>"
+                attrs.flash.info = null
             }
         }
     }
