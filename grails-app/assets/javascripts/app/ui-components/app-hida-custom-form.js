@@ -36,15 +36,13 @@
         },
         submitForm : function(evt) {
             var $btn = $(evt.currentTarget);
-//            $btn.attr('disabled','disabled');
+            $btn.attr('disabled','disabled');
             if($btn.data("nojs")) {
                 var $form = $btn.closest("form");
                 if($btn.data("url")) {
                     $form.attr("action", $btn.data("url"));
                 }
-                $form.submit(function(){
-                    $form.submit(function(){ return false; });
-                });
+                $form.submit();
 //                $btn.removeAttr('disabled');
                 return false;
             }
@@ -54,7 +52,7 @@
             if($btn.data("action") && actionUrl) { // not yet tested, must alter the UI
                 // e.g. <button data-action="showDialogBeforeSubmit" ... then define the customActions in App.view.TableFormTabs
                 this.publishEvt("form:action:"+ $btn.data("action"),
-                    { url : actionUrl, form : form});
+                    { url : actionUrl, form : form, $btn : $btn});
             } else {
                 App.logErr("Must set data-action and/or data-url in the button ");
             }

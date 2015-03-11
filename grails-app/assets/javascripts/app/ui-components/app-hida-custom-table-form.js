@@ -207,6 +207,7 @@
                         case 404:
                         case 500:
                             this.$(".message-container").html(jqXHR.responseText); // untested
+                            $(this.formEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
                             break;
                         default : // 412 used for save/update failed duePrecondition Failed
                             if(this.form != null) { this.form.remove(); this.form = undefined; }
