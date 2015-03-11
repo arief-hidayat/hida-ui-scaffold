@@ -36,7 +36,8 @@
         },
         submitForm : function(evt) {
             var $btn = $(evt.currentTarget);
-            $btn.attr('disabled','disabled');
+//            $btn.attr('disabled','disabled');
+            this.$("form:first .buttons .btn").attr('disabled','disabled');
             if($btn.data("nojs")) {
                 var $form = $btn.closest("form");
                 if($btn.data("url")) {
