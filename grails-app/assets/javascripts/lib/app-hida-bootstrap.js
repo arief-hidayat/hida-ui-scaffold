@@ -14,6 +14,12 @@
     $.ajaxSetup({
 //        beforeSend : function(xhr, event) {
 //        },
+        error : function(jqXHR, textStatus, errorThrown) {
+            window.console && console.log("AJAX error jqXHR.statusText=[" + jqXHR.statusText + "] jqXHR.status=[" + jqXHR.status + "]");
+            if(jqXHR.statusText == "net::ERR_CONNECTION_RESET") {
+                App.onLoggedOut();
+            }
+        },
         statusCode: {
             // Set up a global AJAX error handler to handle the 401
             // unauthorized responses. If a 401 status code comes back,
