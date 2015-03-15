@@ -215,7 +215,10 @@
                     if(otherCallback) otherCallback(newRowEl);
                 }
             })(newRowEl, otherCallback);
-            this.getHtml(App.url + relativeUrl, {i : i}, successCallback );
+            this.getHtml(App.url + relativeUrl, this.paramsForAddEmbeddedTableRow(i), successCallback );
+        },
+        paramsForAddEmbeddedTableRow : function(i) {
+            return {i : i};
         },
         deleteRow : function(e) {
             App.logDebug(" delete row ");
