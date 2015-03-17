@@ -20,11 +20,14 @@
                 view.remove()
             });
             _.each(this.typeAheadFields, function(view) { view.remove()});
+            this.removeSelect2();
+            return App.View.prototype.remove.apply(this, arguments);
+        },
+        removeSelect2 : function() {
             _.each(this.select2Els, function(elem){
                 var $select2 = this.$(elem);
                 if($select2) $select2.select2("destroy");
             }, this);
-            return App.View.prototype.remove.apply(this, arguments);
         },
         ignoreSubmit : function() {
             var $btn = this.$(".buttons .btn:focus");
