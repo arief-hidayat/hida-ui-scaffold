@@ -43,6 +43,7 @@
         if(customUrlConf) {
             if(customUrlConf.columns){ ret.columns = customUrlConf.columns; }
             if(customUrlConf.order){ ret.order = customUrlConf.order; }
+            if(customUrlConf.noFilter) { ret.bFilter = false; }
         }
         return ret;
     };
