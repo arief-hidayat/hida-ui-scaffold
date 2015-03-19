@@ -12,3 +12,11 @@
 *= require app-hida-select2
 *= require_self
 */
+
+#list-section .buttons .btn {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.col-centered{
+    text-align: center;
+}
