@@ -3,7 +3,7 @@ ${"<% int tableWidth = grails.util.Holders.config.hida?.datatable?.singlepage?.w
 <div class="row" id="content-section">
     <div id="list-section" class="col-md-\${tableWidth}">%{--App.view.TableRegion--}%
         <div class="row buttons" style="margin-top: 10px">
-            <div class="col-md-8 col-xs-8 col-centered">
+            <div class="col-xs-12 col-centered">
                 <bt:create>&nbsp;</bt:create>
                 <bt:show>&nbsp;</bt:show>
                 <bt:delete>&nbsp;</bt:delete>
