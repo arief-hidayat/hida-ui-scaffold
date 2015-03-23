@@ -1,33 +1,11 @@
 <%@page expressionCodec="raw" %>
-App.UploadrOptions = App.UploadrOptions || {
-    onView: function(file, domObj) {
-        window.console && console.log('You clicked the \'view\' action for the following uploaded file:');
-        window.console && console.log(file);
-        window.console && console.log('in the following DOM element:');
-        window.console && console.log(domObj);
-        window.console && console.log('Implement a \'onView\' event handler to actually do something in the UI.');
-        window.console && console.log('see: https://github.com/4np/grails-uploadr#event-handlers');
-    },
-    onDelete: function(file, domObj) {
-        var a = $.ajax(
-            '<g:createLink controller="uploadr" action="delete"/>',
-                    {
-                        async: false,
-                        headers: {
-                            'X-File-Name': encodeURIComponent(file.fileName),
-                            'X-Uploadr-Name': encodeURIComponent(this.id)
-                        }
-                    }
-                );
-        return (a.status == 200);
-     },
-    onDownload: function(file, domObj) {
-        var name= $(domObj).attr("name");
-        // redirect to file, note that the backend should implement
-        // authentication and authorization to asure the user has
-        // access to this file
-        window.open('<g:createLink controller="uploadr" action="download"/>?uploadr=' + encodeURIComponent(name) + '&file='+encodeURIComponent(file.fileName));
-    },<g:if test="${classname != 'uploadr'}"> dropableClass: '${classname}-dropable', hoverClass: '${classname}-hover',</g:if>
+App.Uploadr = App.Uploadr || {};
+%{--App.Uploadr.defaultDeleteOptions =  { async: false,--}%
+%{--headers: { 'X-File-Name': encodeURIComponent(file.fileName),--}%
+%{--'X-Uploadr-Name': encodeURIComponent(this.id) } };--}%
+
+App.Uploadr.GlobalOptions = App.Uploadr.GlobalOptions || {
+    <g:if test="${classname != 'uploadr'}"> dropableClass: '${classname}-dropable', hoverClass: '${classname}-hover',</g:if>
     uri: '${uri}',<g:if test="${sound}"> notificationSound: '${resource(dir:'sounds', file:'notify.wav')}', errorSound: '${resource(dir:'sounds', file:'error.wav')}', deleteSound: '${resource(dir:'sounds', file:'delete.wav')}',</g:if>
     labelDone: '<g:message code="uploadr.label.done" />',
     labelFailed: '<g:message code="uploadr.label.failed" />',

@@ -11,6 +11,7 @@
         select2Els : [],
         datePickers : [],
         typeAheadFields : [],
+        uploadr : [],
         events : { //TODO
             "submit form" : "ignoreSubmit",
             "click .buttons .btn" : "submitForm"
@@ -19,7 +20,20 @@
             _.each(this.datePickers, function(view) {
                 view.remove()
             });
+            this.datePickers = [];
+            _.each(this.uploadr, function(el) {
+                var $el = $(el);
+                if($el.length) {
+                    var uploadr = $el.data('uploadr');
+                    if(uploadr) {
+//                        uploadr.clear();
+                        $el.data('uploadr', null);
+                    }
+                }
+            });
+            this.uploadr = [];
             _.each(this.typeAheadFields, function(view) { view.remove()});
+            this.typeAheadFields = [];
             this.removeSelect2();
             return App.View.prototype.remove.apply(this, arguments);
         },
@@ -28,6 +42,7 @@
                 var $select2 = this.$(elem);
                 if($select2) $select2.select2("destroy");
             }, this);
+            this.select2Els = [];
         },
         ignoreSubmit : function() {
             var $btn = this.$(".buttons .btn:focus");
@@ -104,6 +119,7 @@
             this.setupDatePickerFields(parentEl);
             this.setupTypeAheadFields(parentEl);
             this.setupSelect2(this.readOnly, parentEl);
+            this.setupUploadr(parentEl);
             App.logDebug("done setup select2");
             if(App.view.form && App.view.form.moreUiSetup) {
                 App.logDebug("setting up App.view.form.moreUiSetup");
@@ -116,6 +132,21 @@
                 var dpEl = this.$el.selector + " #" + elem.id;
                 if($(dpEl).data('readonly') != "true") { // add this checking. TODO: verify
                     this.datePickers.push(new App.view.DatePicker({ el : dpEl, pubSub : this.pubSub}));
+                }
+            }, this);
+        },
+        setupUploadr : function(parentEl) {
+            var $uploadrs = parentEl == undefined ? this.$(".uploadr") : this.$(parentEl + " .uploadr");
+            _.each($uploadrs, function(elem){
+                var dpEl = this.$el.selector + " #" + elem.id;
+                var $theEl = $(dpEl);
+                var elName = $theEl.attr("name");
+                if(App.Uploadr && App.Uploadr.finalOptions && $theEl.data('readonly') != "true") { // add this checking. TODO: verify
+                    var options = App.Uploadr.finalOptions[elName];
+                    if(options) {
+                        this.uploadr.push(dpEl);
+                        $theEl.uploadr(options);
+                    }
                 }
             }, this);
         },

@@ -16,12 +16,12 @@
  */
 package com.hida.ui
 
-class UploadrTagLib {
+class CustomUploadrTagLib {
     // set encoding
     static defaultEncodeAs = [all: 'raw']
 
     // define namespace
-    static namespace = "uploadr"
+    static namespace = "hidaUpload"
 
     def globalOptions = { attrs, body ->
         def uri
@@ -72,8 +72,8 @@ class UploadrTagLib {
         body()
 
 
-        out << "<script>"
-        out << g.render(
+        out << "<script type=\"text/javascript\">"
+        out << g.render( plugin: 'hidaUiScaffold',
                 template:'/js/uploadrOptions',
                 model	:[
                         maxSize		        : maxSize,
@@ -103,10 +103,11 @@ class UploadrTagLib {
      * @param Map           attributes
      * @param Closure       body
      */
-    def add = { attrs, body ->
+    def display = { attrs, body ->
         def uri
         def sound 			= !(attrs.containsKey('noSound') && attrs.get('noSound').toString().toBoolean())
         def name			= (attrs.containsKey('name') ? attrs.get('name') : UUID.randomUUID())
+        def id			= (attrs.containsKey('id') ? attrs.get('id') : UUID.randomUUID())
         def classname		= (attrs.containsKey('class') ? attrs.get('class') : 'uploadr')
         def direction 		= (attrs.containsKey('direction') ? attrs.get('direction') : 'down')
         def placeholder		= (attrs.containsKey('placeholder') ? attrs.get('placeholder') : '')
@@ -186,16 +187,15 @@ class UploadrTagLib {
         body()
 
         // render file upload div
-        out << "<div name=\"${name}\" class=\"${classname}\"></div>"
+        out << "<div id=\"${id}\" name=\"${name}\" class=\"${classname}\"></div>"
 
         // and render inline initialization javascript
 //        asset.script(assetScriptBlocks: g.render(
 //        asset.script([:], g.render(
 //		out << r.script([:], g.render(
-        out << "<script>"
-        out << g.render(
-                plugin	: 'uploadr',
-                template:'/js/init',
+        out << "<script type=\"text/javascript\">"
+        out << g.render(plugin: 'hidaUiScaffold',
+                template:'/js/initUploadr',
                 model	:[
                         name		        : name,
                         maxSize		        : maxSize,

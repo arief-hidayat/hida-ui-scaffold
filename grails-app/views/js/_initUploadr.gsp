@@ -1,6 +1,7 @@
 <%@page expressionCodec="raw" %>
-$(document).ready(function() {
-    var currUploadrOptions = {<g:if test="${handlers.onStart}">
+(function($){
+    var currUploadrOptions = {<g:if test="${uri}">
+    uri: '${uri}',</g:if><g:if test="${handlers.onStart}">
     onStart: function(file) { ${handlers.onStart} },</g:if><g:if test="${handlers.onProgress}">
     onProgress: function(file, domObj, percentage) { ${handlers.onProgress} },</g:if><g:if test="${handlers.onSuccess}">
     onSuccess: function(file, domObj, callback, response) { ${handlers.onSuccess} },</g:if><g:if test="${handlers.onLike}">
@@ -12,9 +13,9 @@ $(document).ready(function() {
     onView: function(file, domObj) { ${handlers.onView} },</g:if><g:if test="${handlers.onDelete}">
     onDelete: function(file, domObj) { ${handlers.onDelete} },</g:if><g:if test="${handlers.onDownload}">
     onDownload: function(file, domObj) { ${handlers.onDownload} },</g:if>
-        id: '${name}',
+id: '${name}',
         files: {<g:each var="file" in="${files}" status="s">
-        ${s} : {
+    ${s} : {
                     deletable 		: ${file.deletable},
                     fileName 		: '${file.name.replaceAll("'","\\\\'")}',
                     fileSize 		: ${file.size},
@@ -24,10 +25,15 @@ $(document).ready(function() {
                     fileRating 		: ${file.rating}</g:if><g:if test="${file.ratingText}">,
                     fileRatingText 	: '${file.ratingText.replaceAll("'","\\\\'")}'</g:if><g:if test="${file.view}">,
                     fileInfo 		: [<g:each in="${file.info}" var="info" status="i">
-            '${info}'<g:if test="${(i+1) < file.info.size()}">,</g:if></g:each>
-            ]</g:if>
-        }<g:if test="${(s+1) < files.size()}">,</g:if></g:each>
-    }
-    };
+        '${info}'<g:if test="${(i+1) < file.info.size()}">,</g:if></g:each>
+        ]</g:if>
+    }<g:if test="${(s+1) < files.size()}">,</g:if></g:each>
+}
+};
+App.Uploadr.finalOptions = App.Uploadr.finalOptions || {};
+App.Uploadr.finalOptions['${name}'] =  $.extend({},  App.Uploadr.GlobalOptions, currUploadrOptions);
+console.log("...App.Uploadr.finalOptions populated");
+})(jQuery);
+//$(document).ready(function() {
     //$('.${classname}[name=${name}]').uploadr();
-});
+//});

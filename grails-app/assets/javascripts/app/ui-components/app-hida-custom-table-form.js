@@ -17,6 +17,7 @@
             }
         },
         deleteItems : function(data) { // {selectedRows : selectedRows}
+            if(!confirm('Are you sure you want to delete selected item?')) return;
             var ajaxArray = [], i, len;
             for (i = 0, len = data.selectedRows.length; i < len; i += 1) {
                 var idAsParam = this.getIdAsParam(data, i);
@@ -142,6 +143,10 @@
 
         },
         onDeleteForm : function(dt){
+            if(!confirm('Are you sure you want to delete selected item?')) {
+                this.enableButtons();
+                return;
+            }
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
                 { action : "create"},{ id : form.id, action : "show"}, true);
@@ -190,6 +195,9 @@
                 context : this // make sure this BB view is the context
             }).done(successCallBack || function(){}).fail(failCallback || function(){});
         },
+        enableButtons : function() {
+            $(this.formEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
+        },
         ajaxRequestForPartialView : function(action, url, form, expectedForm, initialForm, publishReloadEvt) {
             var successCallback = (function(expectedForm, publishReloadEvt) {
                 return function( data ) {
@@ -207,7 +215,7 @@
                         case 404:
                         case 500:
                             this.$(".message-container").html(jqXHR.responseText); // untested
-                            $(this.formEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
+                            this.enableButtons();
                             break;
                         default : // 412 used for save/update failed duePrecondition Failed
                             if(this.form != null) { this.form.remove(); this.form = undefined; }
@@ -331,6 +339,7 @@
             return formId.id;
         },
         deleteItems : function(data) { // {selectedRows : selectedRows}
+            if(!confirm('Are you sure you want to delete selected item?')) return;
             var ajaxArray = [], i, len, formId = this.getFormId(), resetForm = false;
 //            App.logDebug("deleteItems... formId=" + formId);
 
@@ -418,6 +427,10 @@
 
         },
         onDeleteForm : function(dt){
+            if(!confirm('Are you sure you want to delete selected item?')) {
+                this.enableButtons();
+                return;
+            }
             var url = dt.url, form = dt.form;
             this.ajaxRequestForPartialView("POST", url, form ,
                 { action : "create"},{ id : form.id, action : "show"}, true);
@@ -466,6 +479,9 @@
                 context : this // make sure this BB view is the context
             }).done(successCallBack || function(){}).fail(failCallback || function(){});
         },
+        enableButtons : function() {
+            $(this.formEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
+        },
         ajaxRequestForPartialView : function(action, url, form, expectedForm, initialForm, publishReloadEvt) {
             var successCallback = (function(expectedForm, publishReloadEvt) {
                 return function( data ) {
@@ -484,7 +500,7 @@
                         case 404:
                         case 500:
                             this.$(".message-container").html(jqXHR.responseText); // untested
-                            $(this.formEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
+                            this.enableButtons();
                             break;
                         default : // 412 used for save/update failed duePrecondition Failed
                             if(this.form != null) { this.form.remove(); this.form = undefined; }
