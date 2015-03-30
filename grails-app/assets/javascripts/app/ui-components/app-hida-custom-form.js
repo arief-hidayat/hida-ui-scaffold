@@ -54,7 +54,10 @@
         },
         submitForm : function(evt) {
             var $btn = $(evt.currentTarget);
-//            $btn.attr('disabled','disabled');
+            if($btn.data("new-window") && $btn.data("url")) {
+                window.open($btn.data("url"));
+                return false;
+            }
             this.$("form:first .buttons .btn").attr('disabled','disabled');
             if($btn.data("nojs")) {
                 var $form = $btn.closest("form");
