@@ -14,6 +14,10 @@
     onDelete: function(file, domObj) { ${handlers.onDelete} },</g:if><g:if test="${handlers.onDownload}">
     onDownload: function(file, domObj) { ${handlers.onDownload} },</g:if>
 id: '${name}',
+
+    deletable: ${deletable as String},
+    viewable: ${viewable as String},
+    downloadable: ${downloadable as String},
         files: {<g:each var="file" in="${files}" status="s">
     ${s} : {
                     deletable 		: ${file.deletable},
