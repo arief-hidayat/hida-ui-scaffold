@@ -16,9 +16,11 @@
             <fieldset class="form">
             <g:render template="searchForm" model="\${[filter : filter]}"/>
             </fieldset>
-            <fieldset class="buttons col-xs-12 col-centered"">
+            <fieldset class="buttons col-xs-12 col-centered">
                 <g:submitButton data-action="search" name="search" class="btn btn-primary btn-search" value="\${message(code: 'default.button.search.label', default: 'Search')}" />
-                <g:submitButton data-action="create" name="create" class="btn btn-info btn-create" value="\${message(code: 'default.button.create.label', default: 'Create')}" />
+                <g:if test="\${access?.create}">
+                    <g:submitButton data-action="create" name="create" class="btn btn-info btn-create" value="\${message(code: 'default.button.create.label', default: 'Create')}" />
+                </g:if>
             </fieldset>
             </g:form>
         </div>

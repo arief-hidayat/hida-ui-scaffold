@@ -20,11 +20,14 @@ class ${className}Controller {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
     protected Map viewParamFor(String viewName, ${className} instance, def params) {
-        [model: [${propertyName}: instance, prefix : params._prefix ?: '' , filter : getFilter(params)],
+        [model: [${propertyName}: instance, prefix : params._prefix ?: '' , filter : getFilter(params), access : getAccess()],
          view: viewName]
     }
     private def getFilter(def params) {
         def filter= [:]; params.each { String k, def v -> if(k.startsWith(FILTER_PREFIX)) filter.put(k,v)}; filter
+    }
+    private def getAccess() {
+        [create : true, update : true, read : true, delete : true] // TODO: override with access control.
     }
 
     def dataTableService
