@@ -1,4 +1,5 @@
 //= require /app/util/app-hida-server
+//= require /app/ui-components/app-hida-custom-form
 //= require /app/ui-components/app-hida-datatables
 //= require_self
 
@@ -34,7 +35,7 @@
             this.initView();
         },
         setupListeners: function() {
-            this.subscribeSearchEvt("general.action.search", function() { this.removeTable().buildTable(); });
+            this.subscribeSearchEvt("general.action.search", this.onSearch);
             this.subscribeSearchEvt("general.action.create", this.loadCreateDetailForm );
             this.subscribeDetailEvt("form:button:clicked", this.onDetailFormAction);
         },
@@ -43,6 +44,7 @@
             this.publishSearchEvt("general.action.search"); // to build table.
         },
         onSearch : function() {
+            this.tableConfig = this.tableConfig || {};
             this.tableConfig.data = this.getSearchFormData(); // use this as dataTable filter.
             this.removeTable().buildTable();
         },
@@ -50,6 +52,7 @@
             var $btn = data.$btn;
             if($btn.data("confirm") &&!confirm($btn.data("confirm"))) { this.enableDetailFormButtons(); return; }
             var ajaxType = $btn.data("ajax") || "GET"; // POST, PUT, DELETE, GET
+            if(data.form.action) { delete data.form.action;}
             this.ajaxHTML(ajaxType, data.url, data.form, this.onDetailFormSuccessSubmission, this.onDetailFormFailSubmission);
         },
         onDetailFormSuccessSubmission : function(newView) { this.buildDetailForm(newView).reloadTable(); },
@@ -58,6 +61,11 @@
                 // this is for those who need to reload the content, e.g. original form (probably updated with field error).
                 case 412: // 412 used for save/update failed duePrecondition Failed
                     this.buildDetailForm(jqXHR.responseText);
+                    var $hiddenMessage = this.detailView.$(".hidden-message");
+                    if($hiddenMessage.length > 0) {
+                        this.$message.html($hiddenMessage.html());
+                        $hiddenMessage.remove();
+                    }
                     break;
                 default : // only update error message.
                     App.AJAX.errorHtmlCall(jqXHR);
@@ -65,7 +73,7 @@
             }
         },
         loadShowDetailForm : function() {
-            var opts = this.alwaysPassFilterData ? $.this.getSearchFormData() : {};
+            var opts = this.alwaysPassFilterData ? this.getSearchFormData() : {};
             this.getHTML(this.showDetailUrl, $.extend(opts, {id : this.selectedId}), this.buildDetailForm);
         },
         loadCreateDetailForm : function() {
@@ -78,17 +86,20 @@
             return form;
         },
         initSearchView : function(options) {
-            this.searchView = new App.view.DetailForm(options);
+            this.searchView = new App.view.SearchForm(options);
         },
         buildTable : function() {
-            if(this.tableView == undefined) this.initTable(); else this.reloadTable();
+            if(!this.tableView) this.initTable(); else this.reloadTable();
         },
+        showDetailForm : function() { this.showTab(1); },
+        showTable : function() { this.showTab(0); },
+        showTab : function(idx) { this.$(".nav-tabs li:eq("+ idx +") a").tab("show"); },
         // Table-override start
         initTable : function() {
             this.tableView = new App.view.TableTabRegion( {el: this.tableEl, key: this.key, pubSub: this.tablePubSub,
                 customConfig : this.tableConfig} );
             this.subscribeTableEvt("table:row:select",
-                function(){ this.selectedId = this.tableView.getSelectedId(); this.loadShowDetailForm(); });
+                function(data){ this.selectedId = data.rowId; this.loadShowDetailForm(); });
             this.subscribeTableEvt("table:row:deselect",
                 function(){ this.selectedId = null; this.removeDetailForm(); });
         },
@@ -98,14 +109,15 @@
         buildDetailForm : function(newView) {
             this.removeDetailForm(); this.$(this.detailEl).html(newView);
             this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub});
+            this.showDetailForm();
             return this;
         },
         initDetailForm : function(options) { this.detailView = new App.view.DetailForm(options); },
-        postHTML : function(url, option, callback) { return App.AJAX.postHTML(this, url, option, callback); },
-        getHTML : function(url, option, callback) { return App.AJAX.getHTML(this, url, option, callback); },
-        postJSON : function(url, option, callback) { return App.AJAX.postJSON(this, url, option, callback); },
+        postHTML : function(url, option, callback) { this.$message.empty(); return App.AJAX.postHTML(this, url, option, callback); },
+        getHTML : function(url, option, callback) { this.$message.empty(); return App.AJAX.getHTML(this, url, option, callback); },
+        postJSON : function(url, option, callback) { this.$message.empty(); return App.AJAX.postJSON(this, url, option, callback); },
         ajaxHTML : function(action, url, option, successCallBack, failCallback) {
-            return App.AJAX.ajax(this, action, "html",  url, option, successCallBack, failCallback);
+            this.$message.empty(); return App.AJAX.ajax(this, action, "html",  url, option, successCallBack, failCallback);
         },
         enableDetailFormButtons : function() {
             $(this.detailEl).find(".buttons .btn").each(function(){ $(this).removeAttr('disabled');});
@@ -134,16 +146,13 @@
     });
 
     App.view.SearchForm = App.view.CombinedForm.extend({
-        publishFormEvent : function($btn, formData) {
-            var actionUrl = $btn.data("url") || formData.action;
-            if($btn.data("action") && actionUrl) {
-                var data = { url : actionUrl, form : formData, $btn : $btn};
-//                this.publishEvt("form:action:"+ $btn.data("action"),data);
-                this.publishEvt("form:button:clicked", data); // this is for general listener.
-            } else {
-                App.logErr("Must set data-action and/or data-url in the button ");
-            }
-        }
+        events : { //TODO
+            "submit form" : "ignoreSubmit",
+            "click .buttons .btn-search" : "search",
+            "click .buttons .btn-create" : "create"
+        },
+        search : function() { this.publishEvt("general.action.search"); },
+        create : function() { this.publishEvt("general.action.create"); }
     });
 
     App.view.DetailForm = App.view.CombinedForm.extend({
@@ -166,20 +175,11 @@
         }
     });
     // must be single row selection. --> once selected, we should open the detail.
-    App.view.TableTabRegion = App.View.extend({ // new App.view.TableTabRegion( el: '#asset-list', key: 'Asset' )
-        tableView : null,
-        otherInitialization : function(opt) { },
-        initialize: function(opt) { this.customConfig = opt.customConfig; this.otherInitialization(opt); this.initView(opt); },
-        initView : function(opt) { this.initTable(); },
-        reloadTable: function() { this.initTable(this.tableView.getSelectedRows()); },
-        initTable : function(selectedRows) {
-            this.removeTable();
-            this.tableView = new App.view.Table({el: this.$(".table"), key: this.key, pubSub : this.pubSub,
-                selectedRows : selectedRows, customConfig : this.customConfig, selectionMode : "single"});
-        },
-        getSelectedId: function(){ return this.tableView.getSelectedRows()[0]; },
-        removeTable : function() { if(this.tableView != null) { this.tableView.remove(); this.tableView = undefined; } },
-        remove: function() { this.removeTable(); return App.View.prototype.remove.apply(this, arguments); }
+    App.view.TableTabRegion = App.view.TableRegion.extend({ // new App.view.TableTabRegion( el: '#asset-list', key: 'Asset' )
+        selectionMode : "single",
+        getSelectedId: function(){
+            return this.tableView.getSelectedRows()[0];
+        }
     });
 })(jQuery, Backbone, _, moment, App);
 

@@ -1,6 +1,13 @@
 <%=packageName%>
 <% import grails.persistence.Event %>
-
+<div class="hidden-message" style="display: none;">
+    <dm:messageFromFlash flash="\${flash}"/>
+    <g:hasErrors bean="${propertyName}">
+        <g:eachError bean="${propertyName}" var="error">
+            <dm:messageFromError error="\${error}"/>
+        </g:eachError>
+    </g:hasErrors>
+</div>
 <%  excludedProps = Event.allEvents.toList() << 'version' << 'dateCreated' << 'lastUpdated'
 	persistentPropNames = domainClass.persistentProperties*.name
 	boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate') || pluginManager?.hasGrailsPlugin('hibernate4')
@@ -26,7 +33,6 @@
 			renderFieldForProperty(p, domainClass)
 		}
 	}
-
 private renderFieldForProperty(p, owningClass, prefix = "") {
 	boolean hasHibernate = pluginManager?.hasGrailsPlugin('hibernate') || pluginManager?.hasGrailsPlugin('hibernate4')
 	boolean required = false
@@ -35,14 +41,13 @@ private renderFieldForProperty(p, owningClass, prefix = "") {
 		required = (cp ? !(cp.propertyType in [boolean, Boolean]) && !cp.nullable : false)
 	}
 	%>
-
 <div class="col-md-4 col-sm-6 col-xs-12">
-<div class="form-group \${hasErrors(bean: ${propertyName}, field: '${prefix}${p.name}', 'has-error')} ${required ? 'required' : ''}">
-	<label for="${prefix}${p.name}">
-		<g:message code="default.${prefix}${p.name}.label" default="${p.naturalName}" />
-		<% if (required) { %><span class="required-indicator">*</span><% } %>
-	</label>
-	${renderEditor(p)}
-</div>
+    <div class="form-group \${hasErrors(bean: ${propertyName}, field: '${prefix}${p.name}', 'has-error')} ${required ? 'required' : ''}">
+        <label for="${prefix}${p.name}">
+            <g:message code="default.${prefix}${p.name}.label" default="${p.naturalName}" />
+            <% if (required) { %><span class="required-indicator">*</span><% } %>
+        </label>
+        ${renderEditor(p)}
+    </div>
 </div>
 <%  } %>

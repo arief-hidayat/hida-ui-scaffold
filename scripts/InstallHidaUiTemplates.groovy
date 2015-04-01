@@ -1,20 +1,23 @@
 includeTargets << grailsScript("_GrailsInit")
 
 target(installHidaUiTemplates: "Installs Hida UI scaffolding template") {
-    def srcdir = new File("$hidaUiScaffoldPluginDir/src/templates/scaffolding")
-    def destdir = new File("$basedir/src/templates/scaffolding/")
+    List params = argsMap["params"]
+    String scaffoldingSrcFolder = (params && params.size() > 0 ) ? params.get(0) : "scaffolding"
+    String scaffoldingDestFolder = (params && params.size() > 0) ? ( params.size() == 2 ? params.get(1) : "scaffolding") : "scaffolding"
+    event "StatusUpdate", ["Looking for scaffolding template $scaffoldingSrcFolder to be copied on to $scaffoldingDestFolder"]
+    def srcFolder = new File("$hidaUiScaffoldPluginDir/src/templates/${scaffoldingSrcFolder}")
+    def destdir = new File("$basedir/src/templates/${scaffoldingDestFolder}/")
 
-    if (srcdir?.isDirectory()) {
+    if (srcFolder?.isDirectory()) {
         event "StatusUpdate", ["Copying templates from $hidaUiScaffoldPluginDir"]
 
-        def copyTemplates = ["_form.gsp", "_message.gsp", "_partialCreate.gsp", "_partialEdit.gsp", "_partialShow.gsp",
-                             "_partialSinglePage.gsp", "Controller.groovy","index.gsp",
-                             "renderEditor.template", "singlepage.gsp"]
-
-        for (name in copyTemplates) {
-            def srcfile = new File(srcdir, name)
-            def destfile = new File(destdir, name)
-            ant.copy file: srcfile.absolutePath, tofile: destfile.absolutePath, overwrite: true, failonerror: false
+        File[] listOfFiles = srcFolder.listFiles()
+        for (int i = 0; i < listOfFiles.length; i++) {
+            File srcFile = listOfFiles[i]
+            if (srcFile.isFile()) {
+                File destFile = new File(destdir, srcFile.name)
+                ant.copy file: srcFile.absolutePath, tofile: destFile.absolutePath, overwrite: true, failonerror: false
+            }
         }
         event "StatusFinal", ["Template installation complete"]
     } else {

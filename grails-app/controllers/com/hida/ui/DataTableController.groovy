@@ -7,7 +7,6 @@ class DataTableController {
     static scope = "singleton"
 
     def dataTableService
-
     def list(String domainName) {
         DataTableRequest req = new DataTableRequest(params)
         Map filterData = getFilterData(params)
@@ -23,5 +22,9 @@ class DataTableController {
             }
         }
         filter
+    }
+
+    def display(String key) {
+        render( template: "display", model: [ key : key])
     }
 }
