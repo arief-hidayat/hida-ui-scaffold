@@ -61,15 +61,18 @@
                 // this is for those who need to reload the content, e.g. original form (probably updated with field error).
                 case 412: // 412 used for save/update failed duePrecondition Failed
                     this.buildDetailForm(jqXHR.responseText);
-                    var $hiddenMessage = this.detailView.$(".hidden-message");
-                    if($hiddenMessage.length > 0) {
-                        this.$message.html($hiddenMessage.html());
-                        $hiddenMessage.remove();
-                    }
                     break;
                 default : // only update error message.
                     App.AJAX.errorHtmlCall(jqXHR);
                     this.detailView.enableButtons();
+            }
+        },
+        displayHiddenMessage : function() {
+            if(!this.detailView) return;
+            var $hiddenMessage = this.detailView.$(".hidden-message");
+            if($hiddenMessage.length > 0) {
+                this.$message.html($hiddenMessage.html());
+                $hiddenMessage.remove();
             }
         },
         loadShowDetailForm : function() {
@@ -108,6 +111,7 @@
         // detail form override -start
         buildDetailForm : function(newView) {
             this.removeDetailForm(); this.$(this.detailEl).html(newView);
+            this.displayHiddenMessage();
             this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub});
             this.showDetailForm();
             return this;
