@@ -234,7 +234,7 @@
 
     App.view.AbstractTableFormSinglePage = App.View.extend({
         el : '#content-section', tableEl : '#list-section', formEl : '#detail-section',
-        table : null, form : null, tableCustomUrl : null,
+        table : null, form : null, tableCustomConfig : null,
         events : {
         },
         remove: function() {
@@ -251,7 +251,7 @@
         },
         otherInitialization : function(opt) {
             this.initialForm = opt.initialForm || {};
-            this.tableCustomUrl = opt.tableCustomUrl;
+            this.tableCustomConfig = opt.tableCustomConfig;
         },
         initTableActionListeners : function(opt) {
             var urlController = this.key.charAt(0).toLowerCase() + this.key.substr(1);
@@ -367,7 +367,7 @@
         },
         buildTable : function(publishReload) {
             if(this.table == undefined) {
-                this.table = new App.view.TableRegion( {el: this.tableEl, key: this.key, pubSub: this.pubSub, customUrl : this.tableCustomUrl} );
+                this.table = new App.view.TableRegion( {el: this.tableEl, key: this.key, pubSub: this.pubSub, customConfig : this.tableCustomConfig} );
             }
             else this.table.reloadTable();
             if(publishReload) {

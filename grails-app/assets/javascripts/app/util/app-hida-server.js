@@ -5,19 +5,31 @@
 //= require_self
 
 (function($, App){
-    App.util.HtmlGetter = {
-        getHtml : function(url, option, callback) {
-            return $.ajax({
-                type: "GET",
-                url: url,
-                data: option || {},
-                success: callback || function(){},
-                context : this // make sure this BB view is the context
+    App.AJAX = App.AJAX || {
+        defaultErrorCallback : function($messageContainer){
+            return function(jqXHR) {
+                var message = jqXHR.responseText;
+                if(jqXHR.responseJSON && jqXHR.responseJSON.message) message = jqXHR.responseJSON.message;
+                $messageContainer.html('<p class="bg-danger" style="padding: 10px">'+message+'</p>');
+            }
+        },
+        ajax : function(context, type, dataType, url, option, successCallback, errorCallback) {
+            return $.ajax({ type: type, url: url, data: option || {},dataType: dataType, context : context ,
+                success: successCallback || function(){}, error : errorCallback  || function(){ }
             });
+        },
+        postJSON : function(context, url, option, successCallback, errorCallback) {
+            return App.AJAX.ajax(context, "POST", "json", url, option, successCallback, errorCallback || App.AJAX.errorJsonCall);
+        },
+        getJSON : function(context, url, option, successCallback, errorCallback) {
+            return App.AJAX.ajax(context, "GET", "json", url, option, successCallback, errorCallback || App.AJAX.errorJsonCall);
+        },
+        postHTML : function(context, url, option, successCallback, errorCallback) {
+            return App.AJAX.ajax(context, "POST", "html", url, option, successCallback, errorCallback || App.AJAX.errorHtmlCall);
+        },
+        getHTML : function(context, url, option, successCallback, errorCallback) {
+            return App.AJAX.ajax(context, "GET", "html", url, option, successCallback, errorCallback || App.AJAX.errorHtmlCall);
         }
-    };
-    App.util.JsonGetter = {
-        //TODO:
     };
 })(jQuery, App);
 

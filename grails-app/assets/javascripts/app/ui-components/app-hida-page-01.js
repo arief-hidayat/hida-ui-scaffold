@@ -73,7 +73,7 @@
                     if(tab.url.editForm) tableFormOpt.urlEditForm = App.url + tab.url.editForm;
                     if(tab.url.deleteJSON) tableFormOpt.urlDeleteJSON = App.url + tab.url.deleteJSON;
                 }
-                if(tab.dataTable) tableFormOpt.tableCustomUrl = { url :  App.url + tab.dataTable.url, data : tab.dataTable.data} ;
+                if(tab.dataTable) tableFormOpt.tableCustomConfig = { url :  App.url + tab.dataTable.url, data : tab.dataTable.data} ;
                 var tabView = new App.view.TableFormSinglePage(tableFormOpt);
                 this.tabsView.push(tabView);
                 var tableReloadedCallback = (function(tab, index, context){

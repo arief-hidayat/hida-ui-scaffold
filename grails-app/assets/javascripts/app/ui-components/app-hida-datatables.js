@@ -14,14 +14,14 @@
 
 (function($, Backbone, App){
 
-    App.dataTableOptions = function($root, key, enableRowCallback, customUrl) { // key is domainName e.g. asset, but it might be customized i.e. workOrder/closed
+    App.dataTableOptions = function($root, key, enableRowCallback, customTableConfig) { // key is domainName e.g. asset, but it might be customized i.e. workOrder/closed
             var tableConf = App.dt.config.table[key] || {};
-        var customUrlConf = customUrl || {};
+        var customTableConfigConf = customTableConfig || {};
 
         var pipelineOpt = { url : App.url + "/dataTable/" + key};
-        if(customUrlConf != undefined) {
-            if(customUrlConf.url != undefined) pipelineOpt.url = customUrlConf.url;
-            if(customUrlConf.data != undefined) pipelineOpt.data = customUrlConf.data;
+        if(customTableConfigConf != undefined) {
+            if(customTableConfigConf.url != undefined) pipelineOpt.url = customTableConfigConf.url;
+            if(customTableConfigConf.data != undefined) pipelineOpt.data = customTableConfigConf.data;
         }
         var ret = {
             "processing": true,
@@ -40,10 +40,10 @@
             }
         }
         if(tableConf.order != undefined) { ret.order = tableConf.order; }
-        if(customUrlConf) {
-            if(customUrlConf.columns){ ret.columns = customUrlConf.columns; }
-            if(customUrlConf.order){ ret.order = customUrlConf.order; }
-            if(customUrlConf.noFilter) { ret.bFilter = false; }
+        if(customTableConfigConf) {
+            if(customTableConfigConf.columns){ ret.columns = customTableConfigConf.columns; }
+            if(customTableConfigConf.order){ ret.order = customTableConfigConf.order; }
+            if(customTableConfigConf.noFilter) { ret.bFilter = false; }
         }
         return ret;
     };
@@ -68,11 +68,11 @@
             this.indexOfSelectedId = opt.indexOfSelectedId || this.indexOfSelectedId;
 
             this.pk = opt.pk || this.pk;
-            this.customUrl = opt.customUrl || this.getCustomUrl();
+            this.customConfig = opt.customConfig || this.getCustomUrl();
             this.setSelectedRows(opt.selectedRows || []);
 
             this.otherInitialization(opt);
-            var theDataTable = this.$el.dataTable( App.dataTableOptions(this.$el, this.key, this.canSelectRow(), this.customUrl)); // true, enable row callback.
+            var theDataTable = this.$el.dataTable( App.dataTableOptions(this.$el, this.key, this.canSelectRow(), this.customConfig)); // true, enable row callback.
             if(App.dt.config.makeEditable) {
                 theDataTable.makeEditable(App.dt.config.makeEditable);
             }
@@ -146,7 +146,7 @@
         otherInitialization : function(opt) {
         },
         initialize: function(opt) {
-            this.customUrl = opt.customUrl;
+            this.customConfig = opt.customConfig;
             this.otherInitialization(opt);
             this.initView(opt);
         },
@@ -183,7 +183,7 @@
             if(this.tableView != null) {
                 this.tableView.remove(); this.tableView = undefined;
             }
-            this.tableView = new App.view.Table({el: this.$(".table"), key: this.key, pubSub : this.pubSub, selectedRows : selectedRows, customUrl : this.customUrl});
+            this.tableView = new App.view.Table({el: this.$(".table"), key: this.key, pubSub : this.pubSub, selectedRows : selectedRows, customConfig : this.customConfig});
         },
         remove: function() {
             if(this.tableView != null) {

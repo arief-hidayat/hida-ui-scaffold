@@ -7,11 +7,3 @@ App.dt.config.table = {
     Employee : { columns: [ { "data": "code" }, { "data": "jobTitle" }, { "data": "fullName" }, { "data": "type" } ] },
     EmployeeType : { columns: [ { "data": "type" } ] }
 };
-
-App.dt.config.customUrl = { /// for dataTable query
-//        Asset : {
-//            url : "only for custom",
-//            data : function(){},
-//            extraParams : function(request) { }
-//        }
-};

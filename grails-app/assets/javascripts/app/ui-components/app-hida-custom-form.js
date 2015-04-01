@@ -68,18 +68,20 @@
 //                $btn.removeAttr('disabled');
                 return false;
             }
-            var form = this.serializeForm();
-            var actionUrl = $btn.data("url") || form.action;
+            this.publishFormEvent($btn, this.serializeForm());
+            return false;
+        },
+        publishFormEvent : function($btn, formData) {
+            var actionUrl = $btn.data("url") || formData.action;
             App.logDebug("actionUrl " + actionUrl +", action " + $btn.data("action"));
             if($btn.data("action") && actionUrl) { // not yet tested, must alter the UI
                 // e.g. <button data-action="showDialogBeforeSubmit" ... then define the customActions in App.view.TableFormTabs
-                this.publishEvt("form:action:"+ $btn.data("action"),
-                    { url : actionUrl, form : form, $btn : $btn});
+                var data = { url : actionUrl, form : formData, $btn : $btn};
+                this.publishEvt("form:action:"+ $btn.data("action"),data);
+                this.publishEvt("form:button:clicked", data); // this is for general listener.
             } else {
                 App.logErr("Must set data-action and/or data-url in the button ");
             }
-//            $btn.removeAttr('disabled');
-            return false;
         },
         serializeForm : function(form) {
             var $form = form ? $(form) : this.$("form:first");

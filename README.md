@@ -25,13 +25,6 @@ At the moment, you need to add new javascript assets: app/settings.js
         EmployeeType : { columns: [ { "data": "type" } ] }
     };
     
-    App.dt.config.customUrl = { /// for dataTable query
-    //        Asset : {
-    //            url : "only for custom",
-    //            data : function(){},
-    //            extraParams : function(request) { }
-    //        }
-    };
 
 
 You also need to update Config.groovy
