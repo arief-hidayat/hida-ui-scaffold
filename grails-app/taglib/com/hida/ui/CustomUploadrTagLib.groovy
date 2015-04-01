@@ -125,7 +125,6 @@ class CustomUploadrTagLib {
         def maxConcurrentUploads= (attrs.containsKey('maxConcurrentUploads') ? attrs.get('maxConcurrentUploads').toString().toInteger() : 0)
         def maxConcurrentUploadsMethod = (attrs.containsKey('maxConcurrentUploadsMethod') ? attrs.get('maxConcurrentUploadsMethod').toString() : 'pause')
 
-        println "deletable ${attrs.get('deletable')} ${deletable}"
         // define uri
         if (attrs.get('controller')) {
             // get parameters if any to pass to the custom controller/action
