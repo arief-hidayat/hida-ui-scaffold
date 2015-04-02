@@ -49,11 +49,29 @@ class DataTableService {
         resp
     }
 
+    private Closure getBaseCriteria(def additionalFilter= [:]) {
+        return { Criteria criteria ->
+            additionalFilter.each {
+                String fieldFilter, String fieldValue ->
+                    if(fieldValue) {
+                        def actualFieldVal = getValue(fieldValue)
+                        if(actualFieldVal instanceof String) criteria.eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
+                        else criteria.eq(fieldFilter, getValue(fieldValue))
+                    }
+            }
+        }
+    }
     protected def listByDefaultHibernatePlugin(String key, DataTableRequest req, def additionalFilter= [:]) {
         DataTableResponse resp = new DataTableResponse(draw: req.draw)
         def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
-        Criteria criteria = domainClz.createCriteria()
-        def results = criteria.list(max : req.length, offset: req.start) { //PagedResultList
+
+        Closure baseCriteriaClosure = getBaseCriteria(additionalFilter)
+        long total = domainClz.createCriteria().get {
+            baseCriteriaClosure(delegate)
+            projections { rowCount() }
+        }
+        def results = domainClz.createCriteria().list(max : req.length, offset: req.start) { //PagedResultList
+            baseCriteriaClosure(delegate)
             if(req.search.value) {
                 if(req.columns.size() > 0) {
                     String field= req.columns[0].data
@@ -70,12 +88,6 @@ class DataTableService {
                         }
                     }
                 }
-            }
-            additionalFilter.each {
-                String fieldFilter, String fieldValue ->
-                    def actualFieldVal = getValue(fieldValue)
-                    if(actualFieldVal instanceof String) eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
-                    else eq(fieldFilter, getValue(fieldValue))
             }
             for(DtReqOrder ord : req.orders)
                 order(req.columns.get(ord.column).data, ord.dir)
@@ -98,7 +110,7 @@ class DataTableService {
         }
         resp.recordsFiltered = results.totalCount
         resp.withData(results.list)
-        resp.recordsTotal = domainClz.count()
+        resp.recordsTotal = total
         resp
     }
 
