@@ -1,8 +1,10 @@
 # Scripts to install template and generate UI
 
-Latest UI
-> grails install-hida-ui-templates scaffolding02 
-> grails generate-hida-ui test.Employee
+Latest UI:
+
+    > grails install-hida-ui-templates scaffolding02 
+
+    > grails generate-hida-ui test.Employee
 
     /// minimum config:
 	hida {
@@ -12,7 +14,8 @@ Latest UI
 			]
 		}
 	}
-> grails run-app
+	
+    > grails run-app
 
 
 Install templates:
