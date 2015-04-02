@@ -6,6 +6,14 @@
     <g:set var="entityName" value="\${message(code: '${domainClass.propertyName}.label', default: '${domainClass.naturalName}')}" />
     <title><g:message code="default.list.label" args="[entityName]" /></title>
     <script type="text/javascript" charset="utf-8">App = window.App || {}; App.url = "\${request.contextPath}";</script>
+    <style type="text/css">
+    .content-tab { margin-top: 20px; }
+    .content-tab .nav-tabs>li.active>a { font-weight: bold; }
+    .content-tab .nav-tabs>li.active>a, .content-tab .tab-content > .active { background-color: #f8f8f8; }
+    #search-section { padding-top: 10px; padding-bottom: 10px; background-color: #f8f8f8; }
+    #list-section .table-container { padding-bottom: 10px; padding-top: 20px;}
+    #detail-section .detail-form-container { padding-bottom: 10px; padding-top: 20px; }
+    </style>
 </head>
 <body>
 <div class="row" id="content-section">
@@ -24,28 +32,28 @@
             </fieldset>
             </g:form>
         </div>
-        <div class="row content-tab" style="margin-top: 20px">
+        <div class="row content-tab">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#list-section" data-toggle="tab"><span class="glyphicon glyphicon-th-list"></span> <g:message code="default.list.label" args="[entityName]" /></a></li>
                 <li><a href="#detail-section" data-toggle="tab"><span class="glyphicon glyphicon-list-alt"></span> <g:message code="default.detail.label" default="{0} Detail" args="[entityName]" /></a></li>
             </ul>
             <div class="tab-content">
-                <div id="list-section" class="tab-pane active col-md-12" style="margin-top: 10px">
+                <div id="list-section" class="tab-pane active col-md-12">
                     <div class="row table-container">
                         <dt:table key='${className}'/>%{-- App.view.Table--}%
                     </div>
                 </div>
-                <div id="detail-section" class="tab-pane col-md-12" style="margin-top: 10px">
+                <div id="detail-section" class="tab-pane col-md-12">
                 </div>
             </div>
         </div>
     </div>
 </div>
 <asset:javascript src="app/page02"/>
+<g:render template="jsConfig" model="\${[key : '${className}']}"/>
 <script type="text/javascript" charset="utf-8">
     jQuery(document).ready(function() {
-        var options = { key : "${className}"};
-        // customize config here
+        var options = { key : "${className}"}; // customize config here
         new App.view.SearchTableFormPage(options);
     } );
 </script>

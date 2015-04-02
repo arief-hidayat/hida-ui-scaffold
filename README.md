@@ -1,6 +1,23 @@
 # Scripts to install template and generate UI
 
+Latest UI
+> grails install-hida-ui-templates scaffolding02 
+> grails generate-hida-ui test.Employee
+
+    /// minimum config:
+	hida {
+		datatable {
+			domainfields = [  
+			    Employee : ["code", "jobTitle", "fullName", "type"]
+			]
+		}
+	}
+> grails run-app
+
+
 Install templates:
+> grails install-hida-ui-templates scaffolding02 scaffolding02 
+> grails install-hida-ui-templates scaffolding02 
 > grails install-hida-ui-templates
 
 Create domain with all fields then generate view & controller (from src/templates/scaffolding):
@@ -9,8 +26,7 @@ Create domain with all fields then generate view & controller (from src/template
 or generate from src/templates/different-scaffold, if you have such templates
 > grails generate-hida-ui different-scaffold:test.Employee
 
-Check the generated views and controller. you might want to change some contents. 
-i.e. the JS portion in index.gsp and singlepage.gsp
+Check the generated views and controller. you might want to change some contents.
 
 # Additional Configuration
 
