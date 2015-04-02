@@ -20,7 +20,7 @@
         initialize: function(opt) {
             this.tableEl = opt.tableEl || this.tableEl; this.detailEl = opt.detailEl || this.detailEl; this.searchEl = opt.searchEl || this.searchEl;
             this.tablePubSub = _.extend({},Backbone.Events); this.searchPubSub = _.extend({},Backbone.Events); this.detailPubSub = _.extend({},Backbone.Events);
-            this.tableConfig = opt.tableConfig; this.searchConfig = opt.searchConfig; this.formConfig = opt.formConfig;
+            this.tableConfig = opt.tableConfig || {}; this.searchConfig = opt.searchConfig; this.formConfig = opt.formConfig;
             this.alwaysPassFilterData = opt.alwaysPassFilterData || this.alwaysPassFilterData;
 
             this.$message = this.$(this.messageEl);
@@ -44,8 +44,6 @@
             this.publishSearchEvt("general.action.search"); // to build table.
         },
         onSearch : function() {
-            this.tableConfig = this.tableConfig || {};
-            this.tableConfig.data = this.getSearchFormData(); // use this as dataTable filter.
             this.removeTable().buildTable();
         },
         onDetailFormAction : function(data) { // url, form , $btn
@@ -77,6 +75,7 @@
         },
         loadShowDetailForm : function() {
             var opts = this.alwaysPassFilterData ? this.getSearchFormData() : {};
+            this.showDetailForm();
             this.getHTML(this.showDetailUrl, $.extend(opts, {id : this.selectedId}), this.buildDetailForm);
         },
         loadCreateDetailForm : function() {
@@ -93,14 +92,16 @@
         },
         buildTable : function() {
             if(!this.tableView) this.initTable(); else this.reloadTable();
+            this.showTable();
         },
         showDetailForm : function() { this.showTab(1); },
         showTable : function() { this.showTab(0); },
         showTab : function(idx) { this.$(".nav-tabs li:eq("+ idx +") a").tab("show"); },
         // Table-override start
         initTable : function() {
+            var customTableConfig = $.extend({}, this.tableConfig, { data : this.getSearchFormData()});
             this.tableView = new App.view.TableTabRegion( {el: this.tableEl, key: this.key, pubSub: this.tablePubSub,
-                customConfig : this.tableConfig} );
+                customConfig : customTableConfig} );
             this.subscribeTableEvt("table:row:select",
                 function(data){ this.selectedId = data.rowId; this.loadShowDetailForm(); });
             this.subscribeTableEvt("table:row:deselect",
@@ -113,7 +114,6 @@
             this.removeDetailForm(); this.$(this.detailEl).html(newView);
             this.displayHiddenMessage();
             this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub});
-            this.showDetailForm();
             return this;
         },
         initDetailForm : function(options) { this.detailView = new App.view.DetailForm(options); },
