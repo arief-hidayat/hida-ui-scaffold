@@ -31,6 +31,7 @@
             this.showDetailUrl = opt.showDetailUrl || App.url + "/" + urlController + "/showForm/";
             this.createDetailUrl = opt.createDetailUrl || App.url + "/" + urlController + "/createForm/";
 
+            this.initDetailForm = opt.initDetailForm || this.initDetailForm;
             this.setupListeners();
             this.initView();
         },
@@ -113,7 +114,7 @@
         buildDetailForm : function(newView) {
             this.removeDetailForm(); this.$(this.detailEl).html(newView);
             this.displayHiddenMessage();
-            this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub});
+            this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub, objectId : this.selectedId});
             return this;
         },
         initDetailForm : function(options) { this.detailView = new App.view.DetailForm(options); },
@@ -160,7 +161,7 @@
     });
 
     App.view.DetailForm = App.view.CombinedForm.extend({
-        initialize : function(opt) { this.readOnly = this.isReadOnlyForm(); this.setupUiComponents(); },
+        initialize : function(opt) { this.objectId = opt.objectId; this.readOnly = this.isReadOnlyForm(); this.setupUiComponents(); },
         isReadOnlyForm : function() { return this.$(".detail-form-container").data("readonly") === "true" },
         getFormId : function() {
             var $idField = this.$("form [name='id']"); if($idField) return {'id' : $idField.val()};
