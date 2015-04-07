@@ -39,6 +39,10 @@
             this.subscribeSearchEvt("general.action.search", this.onSearch);
             this.subscribeSearchEvt("general.action.create", this.loadCreateDetailForm );
             this.subscribeDetailEvt("form:button:clicked", this.onDetailFormAction);
+            this.subscribeTableEvt("table:row:select",
+                function(data){ this.selectedId = data.rowId; this.loadShowDetailForm(); });
+            this.subscribeTableEvt("table:row:deselect",
+                function(){ this.selectedId = null; this.removeDetailForm(); });
         },
         initView : function() {
             this.initSearchView({el: this.searchEl, key: this.key, pubSub: this.searchPubSub});
@@ -103,10 +107,6 @@
             var customTableConfig = $.extend({}, this.tableConfig, { data : this.getSearchFormData()});
             this.tableView = new App.view.TableTabRegion( {el: this.tableEl, key: this.key, pubSub: this.tablePubSub,
                 customConfig : customTableConfig} );
-            this.subscribeTableEvt("table:row:select",
-                function(data){ this.selectedId = data.rowId; this.loadShowDetailForm(); });
-            this.subscribeTableEvt("table:row:deselect",
-                function(){ this.selectedId = null; this.removeDetailForm(); });
         },
         reloadTable : function() { this.tableView.reloadTable(); this.publishTableEvt("table:reloaded"); },
         // Table-override end
