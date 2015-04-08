@@ -20,3 +20,6 @@
 .col-centered{
     text-align: center;
 }
+table.dataTable thead, table.dataTable tfoot {
+    font-weight: bold;
+}
