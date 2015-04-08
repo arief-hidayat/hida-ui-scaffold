@@ -4,6 +4,7 @@ import com.hida.ui.dt.DataTableRequest
 import com.hida.ui.dt.DataTableResponse
 import com.hida.ui.dt.DtReqColumn
 import com.hida.ui.dt.DtReqOrder
+import grails.orm.PagedResultList
 import grails.transaction.Transactional
 import grails.util.Holders
 import org.codehaus.groovy.grails.commons.GrailsClassUtils
@@ -49,28 +50,80 @@ class DataTableService {
         resp
     }
 
-    private Closure getBaseCriteria(def additionalFilter= [:]) {
+    Closure getBaseCriteria(def additionalFilter= [:]) {
         return { Criteria criteria ->
             additionalFilter.each {
-                String fieldFilter, String fieldValue ->
+                String fieldFilter, def fieldValue ->
                     if(fieldValue) {
-                        def actualFieldVal = getValue(fieldValue)
-                        if(actualFieldVal instanceof String) criteria.eq(fieldFilter, getValue(fieldValue), [ignoreCase: ignoreCase])
-                        else criteria.eq(fieldFilter, getValue(fieldValue))
+                        def actualFieldVal = fieldValue instanceof String ? getValue(fieldValue) : fieldValue
+                        if(actualFieldVal instanceof String) criteria.eq(fieldFilter, actualFieldVal, [ignoreCase: ignoreCase])
+                        else criteria.eq(fieldFilter, actualFieldVal)
                     }
             }
         }
     }
     protected def listByDefaultHibernatePlugin(String key, DataTableRequest req, def additionalFilter= [:]) {
-        DataTableResponse resp = new DataTableResponse(draw: req.draw)
+//        DataTableResponse resp = new DataTableResponse(draw: req.draw)
         def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
-
         Closure baseCriteriaClosure = getBaseCriteria(additionalFilter)
+        return populateDataTablePage(domainClz, req, baseCriteriaClosure, ignoreCase)
+//        long total = domainClz.createCriteria().get {
+//            baseCriteriaClosure(delegate)
+//            projections { rowCount() }
+//        }
+//        def results = domainClz.createCriteria().list(max : req.length, offset: req.start) { //PagedResultList
+//            baseCriteriaClosure(delegate)
+//            if(req.search.value) {
+//                if(req.columns.size() > 0) {
+//                    String field= req.columns[0].data
+//                    if(!req.search.regex) {
+//                        eq(field, getValue(req.search.value), [ignoreCase: ignoreCase])
+//                    }
+//                    else {
+//                        def searchTerm = getValue(req.search.value)
+//                        if(searchTerm instanceof String)  searchTerm = searchTerm.replaceAll("[*]", "%")
+//                        if(ignoreCase) {
+//                            ilike(field, searchTerm)
+//                        } else {
+//                            like(field, searchTerm)
+//                        }
+//                    }
+//                }
+//            }
+//            for(DtReqOrder ord : req.orders)
+//                order(req.columns.get(ord.column).data, ord.dir)
+//            for(DtReqColumn col : req.columns) {
+//                if(col.search.value) {
+//                    if(!col.search.regex) {
+//                        eq(col.data, getValue(col.search.value), [ignoreCase: ignoreCase])
+//                    }
+//                    else {
+//                        def searchTerm = getValue(col.search.value)
+//                        if(searchTerm instanceof String)  searchTerm = searchTerm.replaceAll("[*]", "%")
+//                        if(ignoreCase) {
+//                            ilike(col.data, searchTerm)
+//                        } else {
+//                            like(col.data, searchTerm)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        resp.recordsFiltered = results.totalCount
+//        resp.withData(results.list)
+//        resp.recordsTotal = total
+//        resp
+    }
+
+
+    def populateDataTablePage(Class domainClz, DataTableRequest req, Closure baseCriteriaClosure, boolean ignoreCase, Closure customCriteriaClosure = null) {
+        DataTableResponse resp = new DataTableResponse(draw: req.draw)
+
         long total = domainClz.createCriteria().get {
             baseCriteriaClosure(delegate)
             projections { rowCount() }
         }
-        def results = domainClz.createCriteria().list(max : req.length, offset: req.start) { //PagedResultList
+        PagedResultList results = domainClz.createCriteria().list(max : req.length, offset: req.start) { //PagedResultList
             baseCriteriaClosure(delegate)
             if(req.search.value) {
                 if(req.columns.size() > 0) {
@@ -89,6 +142,7 @@ class DataTableService {
                     }
                 }
             }
+            if(customCriteriaClosure) customCriteriaClosure(delegate)
             for(DtReqOrder ord : req.orders)
                 order(req.columns.get(ord.column).data, ord.dir)
             for(DtReqColumn col : req.columns) {
