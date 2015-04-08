@@ -17,7 +17,7 @@ class DataTableResponse {
     // can be array of fieldName or callback function.
     static final String ROW_ID = "DT_RowId", ROW_CLASS = "DT_RowClass", ROW_DATA = "DT_RowData"
 
-    static def compositeKeyMap = [:]
+    static def domainKeyMap = [:]
     static String compositeKeyDelimiter = Holders.config.hida?.datatable?.compositekeydelimiter ?: "_"
 
     DataTableResponse withData(def list) {
@@ -55,20 +55,31 @@ class DataTableResponse {
          * @param it
          */
         private Item populateKey(def it) {
-            if (domainKeyConf.containsKey(it.class.simpleName)) {
-                def conf = domainKeyConf[it.class.simpleName]
-                conf.each { fieldKey -> map[fieldKey] = it[fieldKey] }
-            } else {
-                if (!compositeKeyMap.containsValue(it.class.simpleName))
-                    compositeKeyMap.put(it.class.simpleName, DomainClassUtil.getPrimaryKey(it.class))
-                def compositeKey = compositeKeyMap.get(it.class.simpleName)
-                def val = [], data = [:]
-                for (String key : compositeKey) {
-                    val << it[key]; data[key] = it[key]
-                }
-                map[ROW_ID] = val.join(compositeKeyDelimiter)
-                map[ROW_DATA] = data
+//            if (domainKeyConf.containsKey(it.class.simpleName)) {
+//                def conf = domainKeyConf[it.class.simpleName] ?: []
+//                conf.each { fieldKey -> map[fieldKey] = it[fieldKey] }
+//            } else {
+//                if (!domainKeyMap.containsValue(it.class.simpleName))
+//                    domainKeyMap.put(it.class.simpleName, DomainClassUtil.getPrimaryKey(it.class))
+//
+//                def compositeKey = domainKeyMap.get(it.class.simpleName)
+//                def val = [], data = [:]
+//                for (String key : compositeKey) {
+//                    val << it[key]; data[key] = it[key]
+//                }
+//                map[ROW_ID] = val.join(compositeKeyDelimiter)
+//                map[ROW_DATA] = data
+//            }
+            String domainKey = it.class.simpleName
+            if (!domainKeyMap.containsKey(domainKey))
+                domainKeyMap.put(domainKey, domainKeyConf[domainKey] ?: DomainClassUtil.getPrimaryKey(it.class) )
+            def compositeKey = domainKeyMap.get(domainKey)
+            def val = [], data = [:]
+            for (String key : compositeKey) {
+                val << it[key]; data[key] = it[key]
             }
+            map[ROW_ID] = val.join(compositeKeyDelimiter)
+            map[ROW_DATA] = data
             return this
         }
 
