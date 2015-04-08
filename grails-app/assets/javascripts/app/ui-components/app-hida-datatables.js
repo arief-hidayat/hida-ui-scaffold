@@ -72,6 +72,7 @@
             this.setSelectedRows(opt.selectedRows || []);
 
             this.otherInitialization(opt);
+            if(this.customConfig && this.customConfig.pk) this.pk = this.customConfig.pk;
             var theDataTable = this.$el.dataTable( App.dataTableOptions(this.$el, this.key, this.canSelectRow(), this.customConfig)); // true, enable row callback.
             if(App.dt.config.makeEditable) {
                 theDataTable.makeEditable(App.dt.config.makeEditable);
@@ -116,7 +117,7 @@
         },
         // composite key is to override this method.
         getRowId : function(row) {
-            return row.id;
+            return row[this.pk];
         },
         indexOfSelectedId : function(id) {
             var selected = this.getSelectedRows();

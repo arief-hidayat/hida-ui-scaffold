@@ -64,9 +64,9 @@ class DataTableService {
     }
     protected def listByDefaultHibernatePlugin(String key, DataTableRequest req, def additionalFilter= [:]) {
 //        DataTableResponse resp = new DataTableResponse(draw: req.draw)
-        def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
-        Closure baseCriteriaClosure = getBaseCriteria(additionalFilter)
-        return populateDataTablePage(domainClz, req, baseCriteriaClosure, ignoreCase)
+//        def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
+//        Closure baseCriteriaClosure = getBaseCriteria(additionalFilter)
+        return populateDataTablePage(key, req, getBaseCriteria(additionalFilter), ignoreCase)
 //        long total = domainClz.createCriteria().get {
 //            baseCriteriaClosure(delegate)
 //            projections { rowCount() }
@@ -116,9 +116,10 @@ class DataTableService {
     }
 
 
-    def populateDataTablePage(Class domainClz, DataTableRequest req, Closure baseCriteriaClosure, boolean ignoreCase, Closure customCriteriaClosure = null) {
+    def populateDataTablePage(String key, DataTableRequest req, Closure baseCriteriaClosure, boolean ignoreCase, Closure customCriteriaClosure = null) {
         DataTableResponse resp = new DataTableResponse(draw: req.draw)
 
+        def domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
         long total = domainClz.createCriteria().get {
             baseCriteriaClosure(delegate)
             projections { rowCount() }
