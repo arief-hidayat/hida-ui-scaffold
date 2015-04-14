@@ -44,6 +44,7 @@
             if(customTableConfigConf.columns){ ret.columns = customTableConfigConf.columns; }
             if(customTableConfigConf.order){ ret.order = customTableConfigConf.order; }
             if(customTableConfigConf.noFilter) { ret.bFilter = false; }
+            if(customTableConfigConf.noSort) { ret.bSort = false; }
         }
         return ret;
     };
