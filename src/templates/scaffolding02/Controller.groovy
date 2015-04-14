@@ -2,6 +2,7 @@
 
 
 import com.hida.ui.dt.DataTableRequest
+import com.hida.ui.dt.DataTableResponse
 import grails.converters.JSON
 import org.springframework.http.HttpStatus
 
@@ -17,15 +18,26 @@ class ${className}Controller {
     private static final String PARTIAL_SHOW = "_partialShow"
     private static final String INDEX = "index"
     private static final String FILTER_PREFIX = "f_"
+    private static final String SEARCH_PREFIX = "filter_"
 
     static allowedMethods = [save: "POST", update: "POST", delete: "DELETE"]
     protected Map viewParamFor(String viewName, ${className} instance, def params) {
-        [model: [${propertyName}: instance, prefix : params._prefix ?: '' , filter : getFilter(params), access : getAccess()],
+        def searchFilter = getFilterData(params, SEARCH_PREFIX)
+        [model: [${propertyName}: instance, prefix : params._prefix ?: '' , filter : searchFilter, access : getAccess()],
          view: viewName]
     }
-    private def getFilter(def params) {
-        def filter= [:]; params.each { String k, def v -> if(k.startsWith(FILTER_PREFIX)) filter.put(k,v)}; filter
+
+    private Map getFilterData(def params, String prefix) {
+        if (params.filter && params.filter instanceof Map) return params.filter
+        Map filter = [:]
+        params.each { String key, val ->
+            if (key.startsWith(prefix)) {
+                filter.put(key.substring(prefix.length()), val)
+            }
+        }
+        filter
     }
+
     private def getAccess() {
         [create : true, update : true, read : true, delete : true] // TODO: override with access control.
     }
@@ -33,14 +45,15 @@ class ${className}Controller {
     def dataTableService
     def list() {
         DataTableRequest req = new DataTableRequest(params)
-        Map filterData = getFilterData(params)
-        render dataTableService.list(${className}.class, req, filterData) as JSON
-    }
-    private Map getFilterData(def params) {
-        if(params.filter && params.filter instanceof Map) return params.filter
-        Map filter= [:]
-        params.each { String key, val -> if(key.startsWith(FILTER_PREFIX)) { filter.put(key.substring(2), val) } }
-        filter
+        try {
+            Map filterData = getFilterData(params, FILTER_PREFIX)
+            Map searchFilterData = getFilterData(params, SEARCH_PREFIX)
+            render dataTableService.list("${className}", req, filterData) as JSON
+            return
+        } catch(Exception e) {
+            println e.message
+        }
+        render new DataTableResponse(draw: req.draw, recordsTotal: 0, recordsFiltered: 0) as JSON
     }
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
