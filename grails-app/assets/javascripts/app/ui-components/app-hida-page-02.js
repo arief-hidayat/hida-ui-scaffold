@@ -85,6 +85,7 @@
         },
         loadCreateDetailForm : function() {
             var opts = this.alwaysPassFilterData ? this.getSearchFormData() : {};
+            this.showDetailForm();
             this.getHTML(this.createDetailUrl, opts, this.buildDetailForm);
         },
         getSearchFormData : function() {
