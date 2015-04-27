@@ -50,14 +50,31 @@
 .login-title
 {
     color: #555;
-    font-size: 18px;
-    font-weight: 400;
+    /*font-size: 18px;*/
+    /*font-weight: 400;*/
+    display: block;
+
+    font-size: 32px;
+    font-family: 'Kaushan Script', cursive;
+    font-weight: 500;
+    color: #357ebd;
+}
+.logo {
+    /*float: left;*/
+    /*font-size: 20px;*/
+    line-height: 50px;
+    text-align: center;
+    padding: 0 10px;
+    width: 220px;
+    font-family: 'Kaushan Script', cursive;
+    font-weight: 500;
+    height: 50px;
     display: block;
 }
 .profile-img
 {
-    width: 96px;
-    height: 96px;
+    width: 128px;
+    height: 128px;
     margin: 0 auto 10px;
     display: block;
     -moz-border-radius: 50%;
