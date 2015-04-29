@@ -15,6 +15,6 @@ ${"<% int tableWidth = grails.util.Holders.config.hida?.datatable?.singlepage?.w
     </div>
 
     <div id="detail-section" class="col-md-\${12 - tableWidth}">
-        <g:render template="partialCreate"/>
+        %{--<g:render template="partialCreate"/>--}%
     </div>
 </div>
