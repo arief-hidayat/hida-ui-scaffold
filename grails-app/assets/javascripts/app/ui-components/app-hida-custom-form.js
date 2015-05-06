@@ -49,7 +49,7 @@
             if($btn && $btn.data("nojs")) {
                 return true;
             }
-            App.logDebug("ignoreSubmit");
+            //App.logDebug("ignoreSubmit");
             return false;
         },
         submitForm : function(evt) {
@@ -73,7 +73,7 @@
         },
         publishFormEvent : function($btn, formData) {
             var actionUrl = $btn.data("url") || formData.action;
-            App.logDebug("actionUrl " + actionUrl +", action " + $btn.data("action"));
+            //App.logDebug("actionUrl " + actionUrl +", action " + $btn.data("action"));
             if($btn.data("action") && actionUrl) { // not yet tested, must alter the UI
                 // e.g. <button data-action="showDialogBeforeSubmit" ... then define the customActions in App.view.TableFormTabs
                 var data = { url : actionUrl, form : formData, $btn : $btn};
@@ -125,9 +125,9 @@
             this.setupTypeAheadFields(parentEl);
             this.setupSelect2(this.readOnly, parentEl);
             this.setupUploadr(parentEl);
-            App.logDebug("done setup select2");
+            //App.logDebug("done setup select2");
             if(App.view.form && App.view.form.moreUiSetup) {
-                App.logDebug("setting up App.view.form.moreUiSetup");
+                //App.logDebug("setting up App.view.form.moreUiSetup");
                 App.view.form.moreUiSetup.apply(this, [parentEl]);
             }
         },
@@ -218,9 +218,9 @@
                 };
                 if(!multiple) {
                     select2Opts.initSelection = function(element, callback) {
-                        App.logDebug("initSelection , domainId " + domainId);
+                        //App.logDebug("initSelection , domainId " + domainId);
                         if(domainId) {
-                            App.logDebug("init debug. call " + initUrl);
+                            //App.logDebug("init debug. call " + initUrl);
                             $.ajax({ url: initUrl, data : {id : domainId}, dataType: dataType}).done(function(data) { callback(data); });
                         }
                     }
@@ -246,7 +246,7 @@
             var i = $table.find("tbody tr").length - 1;
             var newRowEl = tablePrefix + i; // this should match _shift.gsp
             var $lastRow = $table.find("tbody tr:eq("+ i +")");
-            App.logDebug("add "+ tablePrefix + " row "+ i);
+            //App.logDebug("add "+ tablePrefix + " row "+ i);
             var successCallback = (function(newRowEl, otherCallback) {
                 return function(row) {
                     $lastRow.before(row);
@@ -260,7 +260,7 @@
             return {i : i};
         },
         deleteRow : function(e) {
-            App.logDebug(" delete row ");
+            //App.logDebug(" delete row ");
             $(e.currentTarget).closest("tr").remove();
         },
         getHtml : function(url, option, callback) {

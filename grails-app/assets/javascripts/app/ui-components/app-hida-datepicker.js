@@ -99,7 +99,7 @@
             // do we need to set the picker's date value as we?
         },
         onChangeDatePicker : function(e) {
-            App.logDebug("onChangeDatePicker " + this.field);
+            //App.logDebug("onChangeDatePicker " + this.field);
             if(e.date) {
                 this.setDateValue(e.date);
                 this.publishEvt("dp.change:" + this.field, e);
@@ -107,9 +107,7 @@
         },
         getDateValue : function() {  return this.hasValue() ? new Date(this.year(), this.month(), this.day(), this.hour(), this.minute(), 0) : null},
         setDateValue : function(date) {
-            App.logDebug("setDateValue: " + date);
-//            var theDate = _.isDate(date) ? moment(date) :
-//                moment(date, this.getDateFormat());
+            //App.logDebug("setDateValue: " + date);
             this.setValue(this.$year, date.year());
             this.setValue(this.$month, date.month() ? (date.month() + 1) : date.month());
             this.setValue(this.$day, date.date());

@@ -268,7 +268,7 @@
             this.subscribeEvt("table:action:edit", this.loadForm(this.urlEditForm)); // is this used?
             for(var customAction in this.otherTableActions) {
                 if(this.otherTableActions.hasOwnProperty(customAction)) {
-                    console.log (">>> custom action :" + customAction);
+                    //console.log (">>> custom action :" + customAction);
                     this.subscribeEvt("table:action:" + customAction, this.otherTableActions[customAction]);
                 }
             }
@@ -307,7 +307,7 @@
                 var idAsParam = this.getIdAsParam(eventData);
                 if(url != this.urlCreateForm) {
                     if(idAsParam == undefined || idAsParam.id == undefined) {
-                        App.logDebug("warning: no id found.");
+                        //App.logDebug("warning: no id found.");
                         return;
                     } else {
                         buildFormParam.id = idAsParam.id;
@@ -345,9 +345,9 @@
 
             for (i = 0, len = data.selectedRows.length; i < len; i += 1) {
                 if(formId) {
-                    App.logDebug("compare with data.selectedRows[i] = " + data.selectedRows[i]);
+                    //App.logDebug("compare with data.selectedRows[i] = " + data.selectedRows[i]);
                     if(this.getStringId(formId) == data.selectedRows[i]) {
-                        App.logDebug("reset form...");
+                        //App.logDebug("reset form...");
                         resetForm = true;
                     }
                 }

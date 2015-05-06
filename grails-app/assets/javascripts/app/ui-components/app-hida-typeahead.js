@@ -17,7 +17,7 @@
             "change" : "onSelect"
         },
         reset : function() {
-            App.logDebug("reset value on " + this.key);
+            //App.logDebug("reset value on " + this.key);
             this.$el.removeData("selected-value");
             this.$el.val('').change();
             if(this.$values != undefined) {
@@ -85,9 +85,9 @@
 //            this.$el.typeahead(typeAheadOpt);
             this.initTypeAheadComponent(opt.filter);
             this.publishSearch = opt.publishSearch || this.$el.data('publish-evt') || this.publishSearch;
-            if(this.publishSearch) {
-                App.logDebug(this.field + " is set to publish event. override : " + this.publishSearch);
-            }
+            //if(this.publishSearch) {
+            //    App.logDebug(this.field + " is set to publish event. override : " + this.publishSearch);
+            //}
             this.$el.on('keyup', $.proxy(this.checkOnDelete, this)); // make sure it's reset.
 
 
@@ -137,7 +137,7 @@
             }
         },
         changeUrlFilter : function(filter) {
-            App.logDebug(">>> change typeAhead url filter for field: " + this.field);
+            //App.logDebug(">>> change typeAhead url filter for field: " + this.field);
             if(this.$el.data('typeahead')) {
                 this.$el.data('typeahead').destroy();
             }
