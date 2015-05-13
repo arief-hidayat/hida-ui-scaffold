@@ -10,12 +10,13 @@ import grails.util.Holders
 import org.codehaus.groovy.grails.commons.GrailsClassUtils
 import org.grails.datastore.mapping.query.api.Criteria
 
-@Transactional
+//@Transactional
 class DataTableService {
+    static transactional = false
     def hidaUiUtilService
     private static final boolean ignoreCase = Holders.config.hida?.typeahead?.ignoreCase ?: false
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     DataTableResponse list(String key, DataTableRequest req, def additionalFilter= [:]) { // for simplicity, key is domainName
 //        println "list dataTable -> ${req.draw} ${req.start} ${req.length}. search : ${req.search}"
         Class domainClz = hidaUiUtilService.getClassFromKey(key)?.clazz
