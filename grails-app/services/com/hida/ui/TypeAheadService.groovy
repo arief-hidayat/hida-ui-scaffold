@@ -44,6 +44,7 @@ class TypeAheadService {
         } else if((Holders.pluginManager.hasGrailsPlugin("searchable") || Holders.pluginManager.hasGrailsPlugin("elasticsearch")) &&
                 GrailsClassUtils.getStaticPropertyValue(domainClz, "searchable")) {
 //            return domainClz.search(query, escape: true).results
+            if(query?.trim()?.isEmpty()) query = "*"
             return domainClz.search({must(queryString(query))}).results
         } else {
             throw new RuntimeException("Missing configuration")
