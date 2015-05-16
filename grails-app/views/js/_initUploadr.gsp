@@ -9,7 +9,7 @@
     onLike: function(file, domObj, callback) { ${handlers.onLike} },</g:if><g:if test="${handlers.onUnlike}">
     onUnlike: function(file, domObj, callback) { ${handlers.onUnlike} },</g:if><g:if test="${handlers.onChangeColor}">
     onChangeColor: function(file, domObj, color) { ${handlers.onChangeColor} },</g:if><g:if test="${handlers.onFailure}">
-    onFailure: function(file, domObj) { ${handlers.onFailure} },</g:if><g:if test="${handlers.onAbort}">
+    onFailure: function(file, domObj, response) { ${handlers.onFailure} },</g:if><g:if test="${handlers.onAbort}">
     onAbort: function(file, domObj) { ${handlers.onAbort} },</g:if><g:if test="${handlers.onView}">
     onView: function(file, domObj) { ${handlers.onView} },</g:if><g:if test="${handlers.onDelete}">
     onDelete: function(file, domObj) { ${handlers.onDelete} },</g:if><g:if test="${handlers.onDownload}">

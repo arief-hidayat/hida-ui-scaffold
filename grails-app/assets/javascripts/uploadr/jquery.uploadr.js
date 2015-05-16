@@ -628,7 +628,7 @@
 					progressBar.addClass('failed');
 
 					// callback after failure
-					options.onFailure(fileAttrs, domObj);
+					options.onFailure(fileAttrs, domObj, response);
 
 					// delete file if this was an error
 					if (status != "abort") options.onDelete(fileAttrs, domObj);
@@ -1181,7 +1181,7 @@
 				return true;
 			},
 			onSuccess			: function(file, domObj, callback, response) { callback(); },
-			onFailure			: function(file, domObj) { return true; },
+			onFailure			: function(file, domObj, response) { return true; },
 			onAbort             : function(file, domObj) { return true; },
 			onView              : function(file, domObj) { return true; },
 			onDownload          : function(file, domObj) { return true; },
