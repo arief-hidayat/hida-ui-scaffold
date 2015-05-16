@@ -38,6 +38,7 @@
                 url: url,
                 data: option || {},
                 success: callback || function(){},
+                error : App.AJAX.defaultErrorCallback($("#message-section")),
                 dataType: "json",
                 context : this // make sure this BB view is the context
             });
@@ -183,6 +184,7 @@
                 url: url,
                 data: option || {},
                 success: callback || function(){},
+                error : App.AJAX.defaultErrorCallback($("#message-section")),
                 dataType: "json",
                 context : this // make sure this BB view is the context
             });
@@ -467,6 +469,7 @@
                 url: url,
                 data: option || {},
                 success: callback || function(){},
+                error : App.AJAX.defaultErrorCallback($("#message-section")),
                 dataType: "json",
                 context : this // make sure this BB view is the context
             });

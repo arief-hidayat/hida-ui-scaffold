@@ -10,7 +10,13 @@
             return function(jqXHR) {
                 var message = jqXHR.responseText;
                 if(jqXHR.responseJSON && jqXHR.responseJSON.message) message = jqXHR.responseJSON.message;
-                $messageContainer.html('<p class="bg-danger" style="padding: 10px">'+message+'</p>');
+                console.log(">>>>>" + message);
+                console.log(">>>>>" + $messageContainer);
+                if($messageContainer == undefined || $messageContainer.length == 0) {
+                    alert(message);
+                } else {
+                    $messageContainer.html('<p class="bg-danger" style="padding: 10px">'+message+'</p>');
+                }
             }
         },
         ajax : function(context, type, dataType, url, option, successCallback, errorCallback) {

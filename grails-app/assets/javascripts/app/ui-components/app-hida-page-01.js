@@ -1,6 +1,6 @@
+//= require /app/util/app-hida-server
 //= require /app/ui-components/app-hida-custom-form
 //= require /app/ui-components/app-hida-custom-table-form
-//= require /app/util/app-hida-server
 //= require_self
 
 (function($, Backbone, _, moment, App){
