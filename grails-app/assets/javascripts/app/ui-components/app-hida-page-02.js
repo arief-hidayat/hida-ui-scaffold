@@ -114,8 +114,8 @@
         // detail form override -start
         buildDetailForm : function(newView) {
             this.removeDetailForm(); this.$(this.detailEl).html(newView);
-            this.displayHiddenMessage();
             this.initDetailForm({el: this.detailEl, key: this.key, pubSub: this.detailPubSub, objectId : this.selectedId});
+            this.displayHiddenMessage();
             return this;
         },
         initDetailForm : function(options) { this.detailView = new App.view.DetailForm(options); },
