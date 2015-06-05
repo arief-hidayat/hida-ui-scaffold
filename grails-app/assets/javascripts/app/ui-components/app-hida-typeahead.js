@@ -37,7 +37,7 @@
                     var $this = $(this);
                     if($this.data("field")) {
                         var val = item ? item[$this.data("field")] : null;
-                        if(val) {
+                        if(val != null) {
                             $this.val(val);
                         }
                         else {
