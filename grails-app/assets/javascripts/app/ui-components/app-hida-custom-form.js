@@ -199,11 +199,13 @@
                 var formatResult = App.template.select2.formatResult[$mmEl.data("resulttmpl") || domainName] || function(state) { return state.text; };
                 var formatSelection = App.template.select2.formatSelection[$mmEl.data("selectiontmpl")] || formatResult;
                 var multiple = $mmEl.data("multiple") == "yes";
+                var typeAheadUrl = $mmEl.data("typeahead") || App.url + "/typeAhead/" + domainName;
+
                 var select2Opts = {
                     placeholder : $mmEl.data("placeholder") || "search item",
                     minimumInputLength: 1,
                     ajax : {
-                        url : App.url + "/typeAhead/" + domainName,
+                        url : typeAheadUrl,
                         dataType : dataType,
                         data : function(term, page) { return { query: term } },
                         results : function(data, page) {
