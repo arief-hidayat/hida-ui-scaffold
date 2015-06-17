@@ -177,6 +177,9 @@
                     });
                 }
             }, this);
+            _.each(this.typeAheadFields, function(typeAheadField){
+                typeAheadField.manuallyPublishData();
+            });
         },
         setupSelect2 : function(readOnly, parentEl) {
             var $select2Simples = parentEl == undefined ? this.$(".select2-simple") : this.$(parentEl + " .select2-simple");

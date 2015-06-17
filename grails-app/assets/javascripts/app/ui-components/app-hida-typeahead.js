@@ -30,6 +30,24 @@
                 });
             }
         },
+        manuallyPublishData : function() {
+            if(this.publishSearch) {
+                var item = {};
+                var hasData = false;
+                if(this.$values != undefined) {
+                    this.$values.children("input").each(function(){
+                        var $this = $(this);
+                        if($this.data("field")) {
+                            if($this.val() != null) {
+                                item[$this.data("field")] = $this.val();
+                                hasData = true;
+                            }
+                        }
+                    });
+                }
+                this.publishEvt("ta:search:" + this.field, item);
+            }
+        },
         onSelect : function() {
             var item = this.$el.data("selected-value");
             if(this.$values != undefined) {
