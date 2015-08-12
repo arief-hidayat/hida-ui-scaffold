@@ -1,13 +1,12 @@
-<div class="row message-container" style="margin-left: 0px">
-    <g:render template="message"/>
-</div>
-<div class="row" style="margin-left: 0px">
-    <g:form url="[resource:${propertyName}, action:'save']" <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
+<div class="row detail-form-container" style="margin-left: 0px">
+    <g:form <%= multiPart ? ' enctype="multipart/form-data"' : '' %>>
     <fieldset class="form">
-        <g:render template="form"  model="\${[prefix : prefix, create : true]}"/>
+        <g:render template="detailForm"  model="\${[prefix : prefix, create : true, readonly : false]}"/>
     </fieldset>
-    <fieldset class="buttons">
-        <g:submitButton data-action="save" name="create" class="btn btn-success" value="\${message(code: 'default.button.create.label', default: 'Create')}" />
+    <fieldset class="buttons  col-xs-12 col-centered">
+        <g:if test="\${access?.create}">
+            <g:submitButton data-action="save" data-ajax="POST" data-url="\${createLink(action: 'save')}" name="create" class="btn btn-success" value="\${message(code: 'default.button.create.label', default: 'Create')}" />
+        </g:if>
     </fieldset>
     </g:form>
 </div>

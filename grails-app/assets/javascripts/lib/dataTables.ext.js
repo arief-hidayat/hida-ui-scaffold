@@ -5,11 +5,8 @@
 // You're free to add application-wide JavaScript to this file, but it's generally better 
 // to create separate JavaScript files as needed.
 //
-//= require /lib/jquery/jquery-1.11.1.min
-//= require /lib/jquery.dataTables
-//= require /lib/jquery.validate
-//= require /lib/jquery.jeditable
-//= require /lib/jquery.dataTables.editable
+// = require /lib/jquery/jquery-1.11.1.min
+// = require /lib/jquery.dataTables.min
 //= require_self
 
 (function($){

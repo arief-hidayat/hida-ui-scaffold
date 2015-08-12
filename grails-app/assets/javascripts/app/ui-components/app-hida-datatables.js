@@ -5,11 +5,11 @@
 // You're free to add application-wide JavaScript to this file, but it's generally better 
 // to create separate JavaScript files as needed.
 //
-//= require /app/settings
-//= require /lib/jquery-1.11.1.min
-//= require /lib/dataTables.ext
-//= require /lib/dataTables.bootstrap
-//= require /lib/app-hida-backbone
+// = require /app/settings
+// = require /lib/jquery-1.11.1.min
+// = require /lib/dataTables.ext
+// = require /lib/dataTables.bootstrap
+// = require /lib/app-hida-backbone
 //= require_self
 
 (function($, Backbone, App){
@@ -30,6 +30,7 @@
 //            language: {
 //                url: "/assets/localization/table/"+ App.options.language + ".json"
 //            },
+            "oSearch" : { bRegex : true}, // use regex search by default
             "ajax": $.fn.dataTable.pipeline(pipelineOpt)
         };
         if(enableRowCallback) {
@@ -45,6 +46,7 @@
             if(customTableConfigConf.order){ ret.order = customTableConfigConf.order; }
             if(customTableConfigConf.noFilter) { ret.bFilter = false; }
             if(customTableConfigConf.noSort) { ret.bSort = false; }
+            if(customTableConfigConf.noRegex) { ret.oSearch.bRegex = false; }
         }
         return ret;
     };

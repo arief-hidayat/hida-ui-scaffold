@@ -6,9 +6,6 @@ import org.springframework.context.i18n.LocaleContextHolder
 
 class BsTypeAheadTagLib {
     static namespace = "bs"
-//    static defaultEncodeAs = [taglib: 'html']
-    //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
-
 
 //    <input class="form-control type-ahead" id="assetInstance-assetType" data-field="assetType" data-domain="AssetType"
 //    data-display-key='type' data-items='all' data-minLength='1' value="${assetInstance?.assetType}" placeholder="type ahead and select ..."/>

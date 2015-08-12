@@ -38,7 +38,7 @@ class TypeAheadService {
                     } else {
                         like((String) conf, query + "%")
                     }
-                    if(params.max) maxResults(Integer.parseInt("${params.max}"))
+                    maxResults(params.max ? Integer.parseInt("${params.max}") : 10) // make sure has limit
                 }
             }
         } else if((Holders.pluginManager.hasGrailsPlugin("searchable") || Holders.pluginManager.hasGrailsPlugin("elasticsearch")) &&

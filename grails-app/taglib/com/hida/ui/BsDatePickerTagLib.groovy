@@ -17,8 +17,6 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 class BsDatePickerTagLib {
     static namespace = "bs"
-//    static defaultEncodeAs = [taglib: 'html']
-    //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
     def messageSource
     protected String getMessage(String domainName, String field) {
         messageSource.getMessage("${domainName}.${field}.label", null,
@@ -166,6 +164,10 @@ class BsDatePickerTagLib {
         if( value && (attrs.readonly || attrs.nojs)) {
             sb.append("value='").append(getValueString(attrs, value)).append("' ")
         }
+
+        if(attrs.placeholder) {
+            sb.append("placeholder='").append(attrs.placeholder).append("' ")
+        }
         sb.append("/>")
         String icon = type.equals("timePicker") ? "time" : "calendar"
         sb.append("<span class='input-group-addon'><span class='glyphicon glyphicon-${icon}'></span></span>")
@@ -174,37 +176,37 @@ class BsDatePickerTagLib {
         sb.append("<div id='").append("${fieldPrefix}${attrs.field}-value'").append(">")
         if (fields.contains(DateTimeFieldType.dayOfMonth())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-day'").append(" name='").append("${fieldPrefix}${attrs.field}_day'")
-            if(attrs.value) sb.append(" value='").append(value?.dayOfMonth).append("'")
+            if(value) sb.append(" value='").append(value?.dayOfMonth).append("'")
             sb.append("/>")
         }
 
         if (fields.contains(DateTimeFieldType.monthOfYear())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-month'").append(" name='").append("${fieldPrefix}${attrs.field}_month'")
-            if(attrs.value) sb.append(" value='").append(value?.monthOfYear).append("'")
+            if(value) sb.append(" value='").append(value?.monthOfYear).append("'")
             sb.append("/>")
         }
 
         if (fields.contains(DateTimeFieldType.year())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-year'").append(" name='").append("${fieldPrefix}${attrs.field}_year'")
-            if(attrs.value) sb.append(" value='").append(value?.year).append("'")
+            if(value) sb.append(" value='").append(value?.year).append("'")
             sb.append("/>")
         }
 
         if (fields.contains(DateTimeFieldType.hourOfDay())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-hour'").append(" name='").append("${fieldPrefix}${attrs.field}_hour'")
-            if(attrs.value) sb.append(" value='").append(value?.hourOfDay).append("'")
+            if(value) sb.append(" value='").append(value?.hourOfDay).append("'")
             sb.append("/>")
         }
 
         if (fields.contains(DateTimeFieldType.minuteOfHour())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-minute'").append(" name='").append("${fieldPrefix}${attrs.field}_minute'")
-            if(attrs.value) sb.append(" value='").append(value?.minuteOfHour).append("'")
+            if(value) sb.append(" value='").append(value?.minuteOfHour).append("'")
             sb.append("/>")
         }
 
         if (fields.contains(DateTimeFieldType.secondOfMinute())) {
             sb.append("<input type='hidden' ").append("id='").append("${fieldPrefix}${attrs.field}-second'").append(" name='").append("${fieldPrefix}${attrs.field}_second'")
-            if(attrs.value) sb.append(" value='").append(value?.secondOfMinute).append("'")
+            if(value) sb.append(" value='").append(value?.secondOfMinute).append("'")
             sb.append("/>")
         }
         sb.append("</div>")

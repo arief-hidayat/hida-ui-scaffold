@@ -29,9 +29,15 @@ App.datakey = App.datakey || {
 App.logDebug = App.logDebug || function(msg) { window.console&&console.log(msg);};
 App.logErr = App.logErr || function(msg) { window.console&&console.error(msg);};
 
+App.dropdownSelection = App.dropdownSelection || {};
 App.template =  App.template || {};
 
 App.template.select2  = App.template.select2 || {};
+App.template.select2.defaultTemplate = function(sourceFieldNm, targetFieldNm) {
+    return function(item) {
+        return "<input type='hidden' name='"+ targetFieldNm + "' value='" + item[sourceFieldNm] + "'>" + item[sourceFieldNm];
+    }
+};
 App.template.select2.formatResult  = App.template.select2.formatResult || {};
 App.template.select2.formatSelection  = App.template.select2.formatSelection || {};
 

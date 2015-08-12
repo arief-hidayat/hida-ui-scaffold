@@ -1,8 +1,8 @@
 // Pure backbone stuffs
 //
-//= require /app/settings
-//= require /lib/underscore-min
-//= require /lib/backbone-min
+// = require /app/settings
+// = require /lib/underscore-min
+// = require /lib/backbone-min
 //= require_self
 
 //_.templateSettings.variable = "rc";

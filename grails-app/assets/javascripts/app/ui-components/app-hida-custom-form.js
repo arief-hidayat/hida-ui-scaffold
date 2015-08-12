@@ -1,7 +1,7 @@
-//= require /app/ui-components/app-hida-datatables
-//= require /app/ui-components/app-hida-typeahead
-//= require /app/ui-components/app-hida-datepicker
-//= require /lib/select2.min
+// = require /app/ui-components/app-hida-datatables
+// = require /app/ui-components/app-hida-typeahead
+// = require /app/ui-components/app-hida-datepicker
+// = require /lib/select2.min
 //= require_self
 
 (function($, Backbone, _, App){
@@ -11,7 +11,6 @@
         select2Els : [],
         datePickers : [],
         typeAheadFields : [],
-        uploadr : [],
         events : { //TODO
             "submit form" : "ignoreSubmit",
             "click .buttons .btn" : "submitForm"
@@ -21,17 +20,6 @@
                 view.remove()
             });
             this.datePickers = [];
-            _.each(this.uploadr, function(el) {
-                var $el = $(el);
-                if($el.length) {
-                    var uploadr = $el.data('uploadr');
-                    if(uploadr) {
-//                        uploadr.clear();
-                        $el.data('uploadr', null);
-                    }
-                }
-            });
-            this.uploadr = [];
             _.each(this.typeAheadFields, function(view) { view.remove()});
             this.typeAheadFields = [];
             this.removeSelect2();
@@ -124,10 +112,7 @@
             this.setupDatePickerFields(parentEl);
             this.setupTypeAheadFields(parentEl);
             this.setupSelect2(this.readOnly, parentEl);
-            this.setupUploadr(parentEl);
-            //App.logDebug("done setup select2");
             if(App.view.form && App.view.form.moreUiSetup) {
-                //App.logDebug("setting up App.view.form.moreUiSetup");
                 App.view.form.moreUiSetup.apply(this, [parentEl]);
             }
         },
@@ -137,21 +122,6 @@
                 var dpEl = this.$el.selector + " #" + elem.id;
                 if($(dpEl).data('readonly') != "true") { // add this checking. TODO: verify
                     this.datePickers.push(new App.view.DatePicker({ el : dpEl, pubSub : this.pubSub}));
-                }
-            }, this);
-        },
-        setupUploadr : function(parentEl) {
-            var $uploadrs = parentEl == undefined ? this.$(".uploadr") : this.$(parentEl + " .uploadr");
-            _.each($uploadrs, function(elem){
-                var dpEl = this.$el.selector + " #" + elem.id;
-                var $theEl = $(dpEl);
-                var elName = $theEl.attr("name");
-                if(App.Uploadr && App.Uploadr.finalOptions && $theEl.data('readonly') != "true") { // add this checking. TODO: verify
-                    var options = App.Uploadr.finalOptions[elName];
-                    if(options) {
-                        this.uploadr.push(dpEl);
-                        $theEl.uploadr(options);
-                    }
                 }
             }, this);
         },
@@ -187,7 +157,26 @@
                 var mmEl = this.$el.selector + " #" + elem.id;
                 var $mmEl = $(mmEl);
                 var isReadOnly = readOnly || ($mmEl.attr("readonly"));
-                var $select2 = $mmEl.select2();
+
+                var $select2 = null;
+                var fromJsonSelection = $mmEl.data("from-json");
+                if(fromJsonSelection && App.dropdownSelection && App.dropdownSelection[fromJsonSelection]) {
+                    //$select2.select2("data", App.dropdownSelection[fromJsonSelection]);
+                    $select2 = $mmEl.select2({
+                        query: function (query){
+                            var data = {
+                                results: App.dropdownSelection[fromJsonSelection]
+                            };
+                            query.callback(data);
+                        }
+                    });
+                } else {
+                    $select2 = $mmEl.select2();
+                }
+                var initData= $mmEl.data("init-data");
+                if(initData) {
+                    $select2.select2('data', initData);
+                }
                 if(isReadOnly) {
                     $select2.select2("readonly", true);
                 }
@@ -198,9 +187,14 @@
                 var mmEl = this.$el.selector + " #" + elem.id;
                 var $mmEl = $(mmEl);
                 var isReadOnly = readOnly || ($mmEl.attr("readonly")) || $mmEl.data("readonly");
-                var domainId = $mmEl.data("id"), domainName = $mmEl.data("from"), initUrl = $mmEl.data("initurl"), dataType = $mmEl.data("datatype") || "json";
-                var formatResult = App.template.select2.formatResult[$mmEl.data("resulttmpl") || domainName] || function(state) { return state.text; };
-                var formatSelection = App.template.select2.formatSelection[$mmEl.data("selectiontmpl")] || formatResult;
+                var domainId = $mmEl.data("id"), domainIdField = $mmEl.data("id-field") || "id",  domainName = $mmEl.data("from"), initData= $mmEl.data("init-data"),
+                    initUrl = $mmEl.data("initurl"), dataType = $mmEl.data("datatype") || "json", srcField = $mmEl.data("src-field"), targetField = $mmEl.data("target-field");
+                var resultTemplate = App.template.select2.formatResult[$mmEl.data("resulttmpl") || domainName] ||
+                    App.template.select2.defaultTemplate;
+                var formatResult = (targetField) ?  resultTemplate(srcField , targetField) : resultTemplate;
+                var selectionTemplate = App.template.select2.formatSelection[$mmEl.data("selectiontmpl") || domainName] ||
+                    App.template.select2.defaultTemplate;
+                var formatSelection = (targetField) ?  selectionTemplate(srcField , targetField) : selectionTemplate;
                 var multiple = $mmEl.data("multiple") == "yes";
                 var typeAheadUrl = $mmEl.data("typeahead") || App.url + "/typeAhead/" + domainName;
 
@@ -215,30 +209,34 @@
                             return { results : data };
                         }
                     },
+                    allowClear : true,
                     multiple : multiple,
                     formatResult: formatResult, // omitted for brevity, see the source of this page
                     formatSelection: formatSelection,  // omitted for brevity, see the source of this page
                     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
                     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
                 };
-                if(!multiple) {
-                    select2Opts.initSelection = function(element, callback) {
-                        //App.logDebug("initSelection , domainId " + domainId);
-                        if(domainId) {
-                            //App.logDebug("init debug. call " + initUrl);
-                            $.ajax({ url: initUrl, data : {id : domainId}, dataType: dataType}).done(function(data) { callback(data); });
+
+
+                if(domainId && initUrl) {
+                    var dataQuery = {}; dataQuery[domainIdField] = domainId;
+                    if(multiple) {
+                        var renderDataCallback = (function($mmEl){
+                            return function(data) {
+                                $mmEl.select2("data", data);
+                            };
+                        })($mmEl);
+                        $.ajax({ url: initUrl, data : dataQuery, dataType: dataType}).done(renderDataCallback);
+                    } else {
+                        select2Opts.initSelection = function(element, callback) {
+                            $.ajax({ url: initUrl, data : dataQuery, dataType: dataType}).done(function(data) { callback(data); });
                         }
                     }
                 }
-                if(multiple && domainId) {
-                    var renderDataCallback = (function($mmEl){
-                        return function(data) {
-                            $mmEl.select2("data", data);
-                        };
-                    })($mmEl);
-                    $.ajax({ url: initUrl, data : {id : domainId}, dataType: dataType}).done(renderDataCallback);
-                }
                 var $select2 = $mmEl.select2(select2Opts);
+                if(initData) {
+                    $select2.select2('data', initData);
+                }
                 if(isReadOnly) $select2.select2("readonly", true);
                 this.select2Els.push(mmEl);
             }, this);

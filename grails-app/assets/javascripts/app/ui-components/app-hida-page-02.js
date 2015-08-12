@@ -1,6 +1,6 @@
-//= require /app/util/app-hida-server
-//= require /app/ui-components/app-hida-custom-form
-//= require /app/ui-components/app-hida-datatables
+// = require /app/util/app-hida-server
+// = require /app/ui-components/app-hida-custom-form
+// = require /app/ui-components/app-hida-datatables
 //= require_self
 
 (function($, Backbone, _, moment, App){
@@ -43,6 +43,8 @@
                 function(data){ this.selectedId = data.rowId; this.loadShowDetailForm(); });
             this.subscribeTableEvt("table:row:deselect",
                 function(){ this.selectedId = null; this.removeDetailForm(); });
+
+            this.setupTabListener();
         },
         initView : function() {
             this.initSearchView({el: this.searchEl, key: this.key, pubSub: this.searchPubSub});
@@ -101,6 +103,23 @@
             this.showTable();
         },
         showDetailForm : function() { this.showTab(1); },
+        setupTabListener : function() {
+
+            var closure = (function(context){
+                return function (e) {
+                    var target = $(e.target).attr("href");
+                    var $searchForm = context.$("#search-section form .form");
+                    if($searchForm) {
+                        if (target == '#list-section') {
+                            if($searchForm.is(":hidden")) $searchForm.show();
+                        } else {
+                            if(!$searchForm.is(":hidden")) $searchForm.hide();
+                        }
+                    }
+                }
+            })(this);
+            this.$('.nav-tabs li a[data-toggle="tab"]').on('shown.bs.tab', closure);
+        },
         showTable : function() { this.showTab(0); },
         showTab : function(idx) { this.$(".nav-tabs li:eq("+ idx +") a").tab("show"); },
         // Table-override start

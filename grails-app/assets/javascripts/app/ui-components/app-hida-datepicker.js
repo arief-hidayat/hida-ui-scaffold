@@ -4,10 +4,10 @@
 // + datetimepicker 3.0.0 https://github.com/Eonasdan/bootstrap-datetimepicker http://eonasdan.github.io/bootstrap-datetimepicker
 // + typeahead https://github.com/bassjobsen/Bootstrap-3-Typeahead
 //
-//= require /app/settings
-//= require /lib/moment.min
-//= require /lib/app-hida-bootstrap
-//= require  /lib/app-hida-backbone
+// = require /app/settings
+// = require /lib/moment.min
+// = require /lib/app-hida-bootstrap
+// = require  /lib/app-hida-backbone
 //= require_self
 
 (function($, Backbone, _, moment, App){
@@ -29,6 +29,7 @@
             // setup date picker
             var timePickerOpts = { pickDate: true };
             if(this.isTimePicker()) timePickerOpts.pickDate = false;
+            if(this.getDateFormat()) timePickerOpts.format = this.getDateFormat();
             this.$el.data("date-format", this.getDateFormat());
             this.picker = this.$el.datetimepicker(timePickerOpts);
 

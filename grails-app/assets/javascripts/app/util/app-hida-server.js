@@ -1,7 +1,7 @@
 //
-//= require /app/settings
-//= require /lib/jquery-1.11.1.min
-//= require /lib/app-hida-backbone
+// = require /app/settings
+// = require /lib/jquery-1.11.1.min
+// = require /lib/app-hida-backbone
 //= require_self
 
 (function($, App){

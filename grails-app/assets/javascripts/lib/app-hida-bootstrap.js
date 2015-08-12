@@ -3,10 +3,10 @@
 // + typeahead https://github.com/bassjobsen/Bootstrap-3-Typeahead
 //
 //
-//= require /app/settings
-//= require /lib/jquery-1.11.1.min
-//= require /lib/bootstrap-3.2.0.min
-//= require /lib/bootstrap-datetimepicker.min
+// = require /app/settings
+// = require /lib/jquery-1.11.1.min
+// = require /lib/bootstrap-3.2.0.min
+// = require /lib/bootstrap-datetimepicker
 //= require_self
 
 (function($, App){

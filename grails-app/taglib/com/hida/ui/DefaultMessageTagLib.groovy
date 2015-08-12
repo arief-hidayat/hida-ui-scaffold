@@ -31,8 +31,6 @@ class DefaultMessageTagLib {
         }
     }
 //    <p class="bg-danger"  style="padding: 10px" <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></p>
-
-
     def messageFromError = { attrs ->
         if(attrs.error) {
             def error = attrs.error

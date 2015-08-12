@@ -4,8 +4,6 @@ import grails.util.GrailsNameUtils
 import org.springframework.context.i18n.LocaleContextHolder
 
 class DefaultButtonTagLib {
-//    static defaultEncodeAs = [taglib: 'html']
-    //static encodeAsForTags = [tagName: [taglib:'html'], otherTagName: [taglib:'none']]
      static namespace = "bt"
     def messageSource
     protected String getMessage(String name) {

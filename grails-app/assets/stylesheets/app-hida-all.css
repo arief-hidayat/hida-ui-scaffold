@@ -23,3 +23,9 @@
 table.dataTable thead, table.dataTable tfoot {
     font-weight: bold;
 }
+.content-tab { margin-top: 20px; }
+.content-tab .nav-tabs>li.active>a { font-weight: bold; }
+.content-tab .nav-tabs>li.active>a, .content-tab .tab-content > .active { background-color: #f8f8f8; }
+#search-section { padding-top: 10px; padding-bottom: 10px; background-color: #f8f8f8; }
+#list-section .table-container { padding-bottom: 10px; padding-top: 20px;}
+#detail-section .detail-form-container { padding-bottom: 10px; padding-top: 20px; }

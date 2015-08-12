@@ -73,7 +73,7 @@
 				if (cp.maxSize) sb << ' maxlength="' << cp.maxSize << '"'
 				if (isRequired()) sb << ' required=""'
  				sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
- 				sb << ' readonly="\${show ?: false}"'
+ 				sb << ' readonly="\${readonly}"'
 				sb << '/>'
             } else if (cp.inList) {
 				sb << '<g:select class="form-control select2-simple" name="' << property.name << '"'
@@ -82,7 +82,7 @@
 				sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
 				sb << ' valueMessagePrefix="' << "${domainClass.propertyName}.${property.name}" << '"'
 				sb << renderNoSelection(property)
-				sb << ' readonly="\${show ?: false}"'
+				sb << ' readonly="\${readonly}"'
 				sb << '/>'
 			} else {
 				if (cp.password) {
@@ -101,7 +101,7 @@
 				if (cp.matches) sb << ' pattern="${' << "${domainInstance}.constraints.${property.name}.matches" << '}"'
 				if (isRequired()) sb << ' required=""'
 				sb << ' value="${' << "${domainInstance}?.${property.name}" << '}"'
- 				sb << ' readonly="\${show ?: false}"'
+ 				sb << ' readonly="\${readonly}"'
 				sb << '/>'
 			}
 			sb as String
@@ -109,7 +109,7 @@
     }
 
     private renderByteArrayEditor(domainClass, property) {
-        return "<input type=\"file\" id=\"${property.name}\" name=\"${property.name}\" readonly=\"\${show ?: false}\" />"
+        return "<input type=\"file\" id=\"${property.name}\" name=\"${property.name}\" readonly=\"\${readonly}\" />"
     }
 
     private renderManyToOne(domainClass,property) {
@@ -140,7 +140,7 @@
 		if (isRequired()) sb << ' required=""'
  		sb << ' value="${' << "${domainInstance}?.${property.name}" << '*.id}"'
  		sb << ' class="many-to-many"'
-				sb << ' readonly="\${show ?: false}"'
+				sb << ' readonly="\${readonly}"'
  		sb << '/>'
 		sb as String
     }
@@ -163,9 +163,9 @@
     private renderNumberEditor(domainClass, property) {
         if (!cp) {
             if (property.type == Byte) {
-                return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" class=\"range\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" readonly=\"\${show ?: false}\" />"
+                return "<g:select name=\"${property.name}\" from=\"\${-128..127}\" class=\"range\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" readonly=\"\${readonly}\" />"
             } else {
-                return "<g:field type=\"number\" name=\"${property.name}\" value=\"\${fieldValue(bean: ${domainInstance}, field: '${property.name}')}\" readonly=\"\${show ?: false}\" />"
+                return "<g:textField name=\"${property.name}\" value=\"\${formatNumber(number: ${domainInstance}?.${property.name}, type: 'number')}\" readonly=\"\${readonly}\" />"
             }
         } else {
 	        def sb = new StringBuilder()
@@ -176,7 +176,7 @@
 				if (isRequired()) sb << ' required=""'
 				sb << ' value="${' << "fieldValue(bean: ${domainInstance}, field: '${property.name}')" << '}"'
 				sb << renderNoSelection(property)
-				sb << ' readonly="\${show ?: false}"'
+				sb << ' readonly="\${readonly}"'
 				sb << '/>'
             } else if (cp.inList) {
                 sb << '<g:select class="form-control" name="' << property.name << '"'
@@ -185,15 +185,13 @@
 				sb << ' value="${' << "fieldValue(bean: ${domainInstance}, field: '${property.name}')" << '}"'
 				sb << ' valueMessagePrefix="' << "${domainClass.propertyName}.${property.name}" << '"'
 				sb << renderNoSelection(property)
-				sb << ' readonly="\${show ?: false}"'
+				sb << ' readonly="\${readonly}"'
 				sb << '/>'
             } else {
-				sb << '<g:field type="number" class="form-control" name="' << property.name << '"'
-				if (cp.min != null) sb << ' min="' << cp.min << '"'
-				if (cp.max != null) sb << ' max="' << cp.max << '"'
+				sb << '<g:textField class="form-control" name="' << property.name << '"'
 				if (isRequired()) sb << ' required=""'
-				sb << ' value="${' << "fieldValue(bean: ${domainInstance}, field: '${property.name}')" << '}"'
-				sb << ' readonly="\${show ?: false}"'
+				sb << ' value="${' << "formatNumber(number: ${domainInstance}?.${property.name}, type: 'number')" << '}"'
+				sb << ' readonly="\${readonly}"'
 				sb << '/>'
             }
 			sb as String
@@ -202,14 +200,14 @@
 
     private renderBooleanEditor(domainClass, property) {
         if (!cp) {
-            return "<g:checkBox name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"/>"
+            return "<g:checkBox name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"/>"
         } else {
             def sb = new StringBuilder("<g:checkBox name=\"${property.name}\" ")
             if (cp.widget) sb << "widget=\"${cp.widget}\" ";
             cp.attributes.each { k, v ->
                 sb << "${k}=\"${v}\" "
             }
-            sb << "value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\" />"
+            sb << "value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\" />"
             return sb.toString()
         }
     }
@@ -217,7 +215,7 @@
     private renderDateEditor(domainClass, property) {
         def precision = (property.type == Date || property.type == java.sql.Date || property.type == Calendar) ? "day" : "minute";
         if (!cp) {
-            return "<g:datePicker name=\"${property.name}\" precision=\"${precision}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"/>"
+            return "<g:datePicker name=\"${property.name}\" precision=\"${precision}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"/>"
         } else {
             if (!cp.editable) {
                 return "\${${domainInstance}?.${property.name}?.toString()}"
@@ -231,7 +229,7 @@
                 if (!cp.attributes.precision){
                     sb << "precision=\"${precision}\" "
                 }
-                sb << " value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"/>"
+                sb << " value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"/>"
 
                 return sb.toString()
             }
@@ -240,7 +238,7 @@
 // <bs:datePicker id='optional' field="plannedStartDate" shouldBeAfter="requestDate" shouldBeBefore="plannedEndDate,actualEndDate" hasError="${}" default="${LocalDate.now()}" value="${assetInstance?.plannedStartDate}"/>
 	private renderJodaDateTimeEditor(domainClass,property) {
 		if (!cp) {
-			return "<bs:dateTimePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"></bs:dateTimePicker>"
+			return "<bs:dateTimePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"></bs:dateTimePicker>"
 		} else {
 			if(!cp.editable) {
 				return "\${${domainInstance}?.${property.name}?.toString()}"
@@ -250,7 +248,7 @@
 				cp.attributes.each { k,v ->
 					buf << "${k}=\"${v}\" "
 				}
-				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"></bs:dateTimePicker>"
+				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"></bs:dateTimePicker>"
 				return buf.toString()
 			}
 		}
@@ -258,7 +256,7 @@
 
 	private renderJodaDateEditor(domainClass,property) {
 		if (!cp) {
-			return "<bs:datePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"></bs:datePicker>"
+			return "<bs:datePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"></bs:datePicker>"
 		} else {
 			if (!cp.editable) {
 				return "\${${domainInstance}?.${property.name}?.toString()}"
@@ -268,7 +266,7 @@
 				cp.attributes.each { k,v ->
 					buf << "${k}=\"${v}\" "
 				}
-				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"></bs:datePicker>"
+				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"></bs:datePicker>"
 				return buf.toString()
 			}
 		}
@@ -276,7 +274,7 @@
 
 	private renderJodaTimeEditor(domainClass,property) {
 		if (!cp) {
-			return "<bs:timePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"></bs:timePicker>"
+			return "<bs:timePicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"></bs:timePicker>"
 		} else {
 			if (!cp.editable) {
 				return "\${${domainInstance}?.${property.name}?.toString()}"
@@ -286,7 +284,7 @@
 				cp.attributes.each { k,v ->
 					buf << "${k}=\"${v}\" "
 				}
-				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"></bs:timePicker>"
+				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"></bs:timePicker>"
 				return buf.toString()
 			}
 		}
@@ -294,7 +292,7 @@
 
 	private renderJodaPeriodEditor(domainClass,property) {
 		if (!cp) {
-			return "<bs:periodPicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"></bs:periodPicker>"
+			return "<bs:periodPicker id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"></bs:periodPicker>"
 		} else {
 			if (!cp.editable) {
 				return "\${${domainInstance}?.${property.name}?.toString()}"
@@ -304,7 +302,7 @@
 				cp.attributes.each { k,v ->
 					buf << "${k}=\"${v}\" "
 				}
-				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"></bs:periodPicker>"
+				buf << "id=\"${domainInstance}-${property.name}\" field=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"></bs:periodPicker>"
 				return buf.toString()
 			}
 		}
@@ -316,14 +314,14 @@
 
 	private renderSelectTypeEditor(namespace, type, domainClass, property) {
 		if (!cp) {
-			return "<${namespace}:${type}Select name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${show ?: false}\"/>"
+			return "<${namespace}:${type}Select name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" readonly=\"\${readonly}\"/>"
 		} else {
 			def sb = new StringBuilder("<${namespace}:${type}Select name=\"${property.name}\" ")
 			if (cp.widget) sb << "widget=\"${cp.widget}\" ";
 			cp.attributes.each { k, v ->
 				sb << "${k}=\"${v}\" "
 			}
-			sb << "value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${show ?: false}\"/>"
+			sb << "value=\"\${${domainInstance}?.${property.name}}\" ${renderNoSelection(property)} readonly=\"\${readonly}\"/>"
 			return sb.toString()
 		}
 	}

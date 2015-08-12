@@ -9,20 +9,10 @@ class DataTableController {
     def dataTableService
     def list(String domainName) {
         DataTableRequest req = new DataTableRequest(params)
-        Map filterData = getFilterData(params)
+        Map filterData = DataTableRequest.getFilterData(params)
         render dataTableService.list(domainName, req, filterData) as JSON
     }
 
-    private Map getFilterData(def params) {
-        if(params.filter && params.filter instanceof Map) return params.filter
-        Map filter= [:]
-        params.each { String key, val ->
-            if(key.startsWith("f_")) {
-                filter.put(key.substring(2), val)
-            }
-        }
-        filter
-    }
 
     def display(String key) {
         render( template: "display", model: [ key : key])

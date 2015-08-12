@@ -3,10 +3,10 @@
 // + typeahead https://github.com/bassjobsen/Bootstrap-3-Typeahead
 //
 //
-//= require /app/settings
-//= require /lib/jquery-1.11.1.min
-//= require /lib/bootstrap3-typeahead
-//= require /lib/app-hida-backbone
+// = require /app/settings
+// = require /lib/jquery-1.11.1.min
+// = require /lib/bootstrap3-typeahead
+// = require /lib/app-hida-backbone
 //= require_self
 
 (function($, Backbone, _, App){

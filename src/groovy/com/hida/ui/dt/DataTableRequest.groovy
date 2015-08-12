@@ -5,6 +5,8 @@ package com.hida.ui.dt
  */
 class DataTableRequest {
 //    https://datatables.net/manual/server-side
+
+    static final String FILTER_PREFIX = "dt_"
     int draw, start, length
     DtReqSearch search
     List<DtReqOrder> orders
@@ -35,6 +37,17 @@ class DataTableRequest {
             ))
             colCount++
         }
+    }
+
+    static Map getFilterData(def params) {
+        if(params.filter && params.filter instanceof Map) return params.filter
+        Map filter= [:]
+        params.each { String key, val ->
+            if(key.startsWith(DataTableRequest.FILTER_PREFIX)) {
+                filter.put(key.substring(DataTableRequest.FILTER_PREFIX.length()), val)
+            }
+        }
+        filter
     }
 
 }

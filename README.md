@@ -2,7 +2,7 @@
 
 Latest UI:
 
-    > grails install-hida-ui-templates scaffolding02 
+    > grails install-hida-ui-templates 
 
     > grails generate-hida-ui test.Employee
 
